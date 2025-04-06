@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @method static \ServNX\Toornament\Services\TournamentService tournament()
  * @method static \ServNX\Toornament\Services\ParticipantService participant()
- * @method static \ServNX\Toornament\Services\ToornamentMatchService match()
+ * @method static \ServNX\Toornament\Services\MatchService match()
  * @method static \ServNX\Toornament\Services\RegistrationService registration()
  * @method static \ServNX\Toornament\Services\DisciplineService discipline()
  * @method static \ServNX\Toornament\Http\ToornamentClient getClient()

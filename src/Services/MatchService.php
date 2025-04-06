@@ -4,7 +4,7 @@ namespace ServNX\Toornament\Services;
 
 use ServNX\Toornament\Models\ToornamentMatch;
 
-class ToornamentMatchService extends BaseToornamentService
+class MatchService extends BaseToornamentService
 {
     /**
      * The base API endpoint.

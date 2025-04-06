@@ -49,7 +49,7 @@ class ToornamentServiceProvider extends ServiceProvider
         $services = [
             'tournament' => \ServNX\Toornament\Services\TournamentService::class,
             'participant' => \ServNX\Toornament\Services\ParticipantService::class,
-            'match' => \ServNX\Toornament\Services\ToornamentMatchService::class,
+            'match' => \ServNX\Toornament\Services\MatchService::class,
             'registration' => \ServNX\Toornament\Services\RegistrationService::class,
             'discipline' => \ServNX\Toornament\Services\DisciplineService::class,
             'custom_field' => \ServNX\Toornament\Services\CustomFieldService::class,
