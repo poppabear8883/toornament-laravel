@@ -24,6 +24,22 @@ class Toornament
     }
 
     /**
+     * Dynamically handle calls to services.
+     *
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call(string $method, array $arguments)
+    {
+        if (app()->bound("toornament.{$method}")) {
+            return app("toornament.{$method}");
+        }
+
+        throw new \BadMethodCallException("Method {$method} does not exist.");
+    }
+
+    /**
      * Get the HTTP client instance.
      *
      * @return \ServNX\Toornament\Http\ToornamentClient
