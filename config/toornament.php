@@ -25,7 +25,7 @@ return [
     | The base URL for all API requests
     |
     */
-    'base_url' => 'https://api.toornament.com/organizer/v2',
+    'base_url' => 'https://api.toornament.com/organizer/v2/',
 
     /*
     |--------------------------------------------------------------------------
