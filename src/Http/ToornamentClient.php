@@ -115,9 +115,6 @@ class ToornamentClient
             $response = $this->client->request($method, $endpoint, $options);
             $contents = $response->getBody()->getContents();
 
-            // Log or dump the raw contents
-            \Log::debug('Toornament raw response: ' . $contents);
-
             return json_decode($contents, true) ?? [];
         } catch (GuzzleException $e) {
             throw new ToornamentException('Toornament API request failed: ' . $e->getMessage(), 0, $e);

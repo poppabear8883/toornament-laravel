@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Tournament
+class Tournament implements \JsonSerializable
 {
     /**
      * The tournament attributes.
@@ -120,5 +120,10 @@ class Tournament
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->attributes;
     }
 }
