@@ -11,7 +11,7 @@ class StandingService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/standing-items';
+    protected $endpoint = 'standing-items';
 
     /**
      * The pagination unit.

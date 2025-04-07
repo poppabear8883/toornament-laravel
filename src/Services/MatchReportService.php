@@ -11,7 +11,7 @@ class MatchReportService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/reports';
+    protected $endpoint = 'reports';
 
     /**
      * The pagination unit.

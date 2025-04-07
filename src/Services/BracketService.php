@@ -11,7 +11,7 @@ class BracketService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/bracket-nodes';
+    protected $endpoint = 'bracket-nodes';
 
     /**
      * The pagination unit.

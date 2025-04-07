@@ -11,7 +11,7 @@ class RegistrationService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/registrations';
+    protected $endpoint = 'registrations';
 
     /**
      * The pagination unit.

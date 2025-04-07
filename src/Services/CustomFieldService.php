@@ -11,7 +11,7 @@ class CustomFieldService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/custom-fields';
+    protected $endpoint = 'custom-fields';
 
     /**
      * The pagination unit.

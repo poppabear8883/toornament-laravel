@@ -11,7 +11,7 @@ class SponsorService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/tournament-sponsors';
+    protected $endpoint = 'tournament-sponsors';
 
     /**
      * The pagination unit.

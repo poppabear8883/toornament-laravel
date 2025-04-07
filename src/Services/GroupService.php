@@ -11,7 +11,7 @@ class GroupService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/groups';
+    protected $endpoint = 'groups';
 
     /**
      * The pagination unit.

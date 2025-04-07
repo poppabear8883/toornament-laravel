@@ -11,7 +11,7 @@ class RoundService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/rounds';
+    protected $endpoint = 'rounds';
 
     /**
      * The pagination unit.

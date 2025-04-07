@@ -11,7 +11,7 @@ class DisciplineService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/disciplines';
+    protected $endpoint = 'disciplines';
 
     /**
      * The pagination unit.

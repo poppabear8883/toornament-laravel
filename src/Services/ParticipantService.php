@@ -11,7 +11,7 @@ class ParticipantService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/participants';
+    protected $endpoint = 'participants';
 
     /**
      * The pagination unit.

@@ -11,7 +11,7 @@ class RankingService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/ranking-items';
+    protected $endpoint = 'ranking-items';
 
     /**
      * The pagination unit.

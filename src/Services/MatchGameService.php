@@ -11,7 +11,7 @@ class MatchGameService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/matches/{match_id}/games';
+    protected $endpoint = 'matches/{match_id}/games';
 
     /**
      * The pagination unit.

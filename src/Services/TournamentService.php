@@ -11,7 +11,7 @@ class TournamentService extends BaseToornamentService
      *
      * @var string
      */
-    protected $endpoint = '/tournaments';
+    protected $endpoint = 'tournaments';
 
     /**
      * The pagination unit.
