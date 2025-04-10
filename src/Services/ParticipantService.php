@@ -43,8 +43,6 @@ class ParticipantService extends BaseToornamentService
 
         $data = $this->client()->paginate('GET', $this->endpoint, $this->unit, 50, $options, $this->getScope());
 
-        \Log::debug('data', $data);
-
         return array_map(function ($item) {
             return new Participant($item);
         }, $data);
