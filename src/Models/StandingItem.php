@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class StandingItem
+class StandingItem implements \JsonSerializable
 {
     /**
      * The standing item attributes.
@@ -149,5 +149,10 @@ class StandingItem
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

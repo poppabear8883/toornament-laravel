@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class BracketNode
+class BracketNode implements \JsonSerializable
 {
     /**
      * The bracket node attributes.
@@ -279,5 +279,10 @@ class BracketNode
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

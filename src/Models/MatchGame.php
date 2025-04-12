@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class MatchGame
+class MatchGame implements \JsonSerializable
 {
     /**
      * The match game attributes.
@@ -211,5 +211,10 @@ class MatchGame
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

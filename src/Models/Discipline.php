@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Discipline
+class Discipline implements \JsonSerializable
 {
     /**
      * The discipline attributes.
@@ -187,5 +187,10 @@ class Discipline
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

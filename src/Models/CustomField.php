@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class CustomField
+class CustomField implements \JsonSerializable
 {
     /**
      * The custom field attributes.
@@ -180,5 +180,10 @@ class CustomField
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

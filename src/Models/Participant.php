@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Participant
+class Participant implements \JsonSerializable
 {
     /**
      * The participant attributes.
@@ -100,5 +100,10 @@ class Participant
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

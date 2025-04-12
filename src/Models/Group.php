@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Group
+class Group implements \JsonSerializable
 {
     /**
      * The group attributes.
@@ -160,5 +160,10 @@ class Group
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

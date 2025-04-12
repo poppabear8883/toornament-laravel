@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class RankingItem
+class RankingItem implements \JsonSerializable
 {
     /**
      * The ranking item attributes.
@@ -302,5 +302,10 @@ class RankingItem
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

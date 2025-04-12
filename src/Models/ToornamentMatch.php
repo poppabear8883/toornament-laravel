@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class ToornamentMatch
+class ToornamentMatch implements \JsonSerializable
 {
     /**
      * The match attributes.
@@ -283,5 +283,10 @@ class ToornamentMatch
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

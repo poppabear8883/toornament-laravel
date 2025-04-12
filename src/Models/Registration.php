@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Registration
+class Registration implements \JsonSerializable
 {
     /**
      * The registration attributes.
@@ -250,5 +250,10 @@ class Registration
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

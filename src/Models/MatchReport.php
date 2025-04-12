@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class MatchReport
+class MatchReport implements \JsonSerializable
 {
     /**
      * The match report attributes.
@@ -222,5 +222,10 @@ class MatchReport
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Round
+class Round implements \JsonSerializable
 {
     /**
      * The round attributes.
@@ -170,5 +170,10 @@ class Round
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize()
+    {
+        return $this->attributes;
     }
 }
