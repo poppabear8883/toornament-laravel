@@ -2,7 +2,6 @@
 
 namespace ServNX\Toornament\Services;
 
-use Illuminate\Support\Collection;
 use ServNX\Toornament\Models\Participant;
 
 class ParticipantService extends BaseToornamentService
@@ -34,7 +33,7 @@ class ParticipantService extends BaseToornamentService
      * @param array $filters
      * @return array
      */
-    public function all(array $filters = []): Collection
+    public function all(array $filters = []): array
     {
         $options = [];
 
@@ -44,9 +43,9 @@ class ParticipantService extends BaseToornamentService
 
         $data = $this->client()->paginate('GET', $this->endpoint, $this->unit, 50, $options, $this->getScope());
 
-        return collect(array_map(function ($item) {
+        return array_map(function ($item) {
             return (new Participant($item))->toArray();
-        }, $data));
+        }, $data);
     }
 
     /**
