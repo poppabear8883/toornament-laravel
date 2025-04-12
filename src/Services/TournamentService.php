@@ -110,4 +110,16 @@ class TournamentService extends BaseToornamentService
 
         return true;
     }
+
+    /**
+     * Get the tournament's participants.
+     */
+    public function participants(string $id): array
+    {
+        $data = $this->client()->request('GET', "{$this->endpoint}/{$id}/participants", [], $this->getScope());
+
+        return array_map(function ($item) {
+            return new Tournament($item);
+        }, $data);
+    }
 }
