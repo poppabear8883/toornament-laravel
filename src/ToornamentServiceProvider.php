@@ -57,6 +57,7 @@ class ToornamentServiceProvider extends ServiceProvider
             'group' => \ServNX\Toornament\Services\GroupService::class,
             'round' => \ServNX\Toornament\Services\RoundService::class,
             'sponsor' => \ServNX\Toornament\Services\SponsorService::class,
+            'stage' => \ServNX\Toornament\Services\StageService::class,
             'standing' => \ServNX\Toornament\Services\StandingService::class,
             'match_report' => \ServNX\Toornament\Services\MatchReportService::class,
             'match_game' => \ServNX\Toornament\Services\MatchGameService::class,
