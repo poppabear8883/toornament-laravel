@@ -1,0 +1,373 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "tournament_sponsor"
+    },
+    {
+      "name": "organizer_tournament_sponsors"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Sponsors",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.0.0",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/tournament-sponsors": {
+      "get": {
+        "tags": [
+          "organizer_tournament_sponsors"
+        ],
+        "summary": "Retrieve all sponsors.",
+        "description": "Returns all sponsors, ordered by ascending position.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentSponsorRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIds"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Sponsors retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Sponsor"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_tournament_sponsors"
+        ],
+        "summary": "Create a new sponsor.",
+        "description": "Creates a new sponsor in a tournament.",
+        "requestBody": {
+          "description": "Sponsor data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/SponsorCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Sponsor created.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Sponsor"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournament-sponsors\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_tournament_sponsors"
+        ],
+        "summary": "Retrieve a single sponsor.",
+        "description": "Returns a sponsor identified with the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentSponsorId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Sponsor retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Sponsor"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_tournament_sponsors"
+        ],
+        "summary": "Update a single sponsor.",
+        "description": "Updates one or several elements of a single sponsor.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentSponsorId"
+          }
+        ],
+        "requestBody": {
+          "description": "Tournament data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/SponsorBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Sponsor"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_tournament_sponsors"
+        ],
+        "summary": "Delete a single sponsor.",
+        "description": "Deletes a single sponsor, identified by the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentSponsorId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with \u0027organizer:admin\u0027 scope (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:admin": "Grants the ability to create tournament and edit settings."
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:admin": "Grants the ability to create tournament and edit settings."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "tournamentSponsorRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "sponsors=0-49"
+        },
+        "description": "A range of requested items using the \u0027sponsors\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "tournamentSponsorId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the sponsor."
+      },
+      "tournamentIds": {
+        "name": "tournament_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return sponsors for the given list of tournaments."
+      }
+    },
+    "schemas": {
+      "SponsorBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the sponsor.",
+            "type": "string",
+            "maxLength": 30,
+            "example": "My Weekly Tournament"
+          },
+          "website": {
+            "description": "The sponsor\u0027s website URL.",
+            "type": "string",
+            "nullable": true,
+            "example": "http:\/\/www.toornament.com"
+          },
+          "position": {
+            "description": "The position of the sponsor (used for display purposes).",
+            "type": "integer",
+            "example": 5
+          },
+          "light_logo": {
+            "allOf": [
+              {
+                "description": "The sponsor logo reference object."
+              },
+              {
+                "$ref": "#\/components\/schemas\/SponsorLogo"
+              }
+            ]
+          }
+        }
+      },
+      "SponsorCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/SponsorBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tournament_id",
+              "name",
+              "website",
+              "position",
+              "light_logo"
+            ],
+            "properties": {
+              "tournament_id": {
+                "description": "An identifier for a tournament; can be used in other APIs.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "Sponsor": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/SponsorCreate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "tournament_id",
+              "name",
+              "website",
+              "position",
+              "light_logo"
+            ],
+            "properties": {
+              "id": {
+                "description": "The unique identifier of the sponsor.",
+                "type": "string",
+                "example": "495923570669058051"
+              }
+            }
+          }
+        ]
+      },
+      "SponsorLogo": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "description": "The unique identifier of a file (with context \u0022tournament_sponsor\u0022), that can be used in other APIs.",
+            "type": "string",
+            "example": "529400138800557511"
+          }
+        }
+      }
+    }
+  }
+}

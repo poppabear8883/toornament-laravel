@@ -1,0 +1,1292 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "participant"
+    },
+    {
+      "name": "organizer_participants"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Participants",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.4.0",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/participants": {
+      "get": {
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Retrieves participants of all your tournaments.",
+        "description": "Retrieves the participants of all your tournaments.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/participantRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantName"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/isCheckedIn"
+          },
+          {
+            "$ref": "#\/components\/parameters\/userIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/teamIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customUserIdentifiers"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantSort"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Participants retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#\/components\/schemas\/ParticipantPlayerFully"
+                      },
+                      {
+                        "$ref": "#\/components\/schemas\/ParticipantTeamFully"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Creates a new participant.",
+        "description": "Creates a new participant.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldRequired"
+          }
+        ],
+        "requestBody": {
+          "description": "Participant data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantPlayerFullyCreate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantTeamFullyCreate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailedFully"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailedFully"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      }
+    },
+    "\/participants\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Retrieves a participant.",
+        "description": "Retrieves a participant identified by the given id. The data provided in the participant depends on whether the participant type is team or player. This setting can be found in the tournament.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participant retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailedFully"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailedFully"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Updates a participant.",
+        "description": "Updates a participant identified by the given id. The participant data depends on whether the participant type is team or player. This setting can be found in the tournament.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customFieldRequired"
+          }
+        ],
+        "requestBody": {
+          "description": "Participant data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantPlayerUpdate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantTeamUpdate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participant update.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailedFully"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailedFully"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Deletes a participant.",
+        "description": "Deletes a participant identified by the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/participants": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Retrieve the participants of a tournament.",
+        "description": "Returns the participants of the given tournament. The participant data depends on whether the participant type is team or player. This setting can be found in the tournament.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/participantRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantName"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantSort"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Participants retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#\/components\/schemas\/ParticipantPlayer"
+                      },
+                      {
+                        "$ref": "#\/components\/schemas\/ParticipantTeam"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Create a new participant in a tournament.",
+        "description": "Create a new participant in the given tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "requestBody": {
+          "description": "Participant data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantPlayerCreate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantTeamCreate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailed"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailed"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/participants\/{id}": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Retrieve a participant of a tournament.",
+        "description": "Returns a participant of the given tournament. The participant data depends on whether the participant type is team or player. This setting can be found in the tournament.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participant retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailed"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailed"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Update a participant in a tournament.",
+        "description": "Updates a participant of the given tournament. The participant data depends on whether the participant type is team or player. This setting can be found in the tournament.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          }
+        ],
+        "requestBody": {
+          "description": "Participant data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantBase"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/ParticipantTeamBase"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Participant update.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantPlayerDetailed"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/ParticipantTeamDetailed"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "deprecated": true,
+        "tags": [
+          "organizer_participants"
+        ],
+        "summary": "Delete a participant in a tournament.",
+        "description": "Deletes a participant of the given tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/participantId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:participant"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with \u0027organizer:participant\u0027 scope (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:participant": "Grants the ability to manage participants of a tournament."
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:participant": "Grants the ability to manage participants of a tournament."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "participantRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "participants=0-49"
+        },
+        "description": "A range of requested items using the \u0027participants\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "tournamentId": {
+        "name": "tournament_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the tournament the participants are from."
+      },
+      "participantId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the participant to retrieve."
+      },
+      "participantName": {
+        "name": "name",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The string to be looked for in the name of the participant."
+      },
+      "participantSort": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "created_asc",
+            "created_desc",
+            "alphabetic"
+          ],
+          "default": "created_asc"
+        },
+        "description": "A method to sort the filtered data. \u201ccreated_asc\u201d and \u201ccreated_desc\u201d sort the participants from their creation date (earliest to latest, and inversely). \u201cAlphabetic\u201d sorts the participants using their case-insensitive names."
+      },
+      "tournamentIds": {
+        "name": "tournament_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return participants for the given list of tournaments."
+      },
+      "isCheckedIn": {
+        "name": "is_checked_in",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "boolean",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "description": "Whether the participant is checked in."
+      },
+      "participantIds": {
+        "name": "participant_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return participants for the given list of participant."
+      },
+      "userIds": {
+        "name": "user_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "475141143408399456,735147043408391234"
+        },
+        "description": "Only return participants for the given list of player user ids."
+      },
+      "teamIds": {
+        "name": "team_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "561714159547269773,255149043401714321"
+        },
+        "description": "Only return participants for the given list of team ids."
+      },
+      "customUserIdentifiers": {
+        "name": "custom_user_identifiers",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "acme:account:1234,acme:account:1235"
+        },
+        "description": "A list of external custom user identifiers."
+      },
+      "customFieldRequired": {
+        "name": "custom_field_required",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
+        },
+        "description": "Allow required custom fields empty"
+      }
+    },
+    "schemas": {
+      "ParticipantBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the participant.",
+            "type": "string",
+            "maxLength": 40,
+            "example": "Jon Snow"
+          },
+          "email": {
+            "description": "The participant email.",
+            "type": "string",
+            "maxLength": 180,
+            "nullable": true,
+            "example": "jonanddaenerys@westeros.got"
+          },
+          "custom_user_identifier": {
+            "description": "An external custom user identifier. Use the format that suits your needs.",
+            "type": "string",
+            "maxLength": 100,
+            "nullable": true,
+            "example": "acme:account:1234"
+          },
+          "checked_in": {
+            "description": "Whether the participant is checked in.",
+            "type": "boolean",
+            "example": true
+          },
+          "custom_fields": {
+            "description": "The values of the custom fields configured in the tournament using the machine names as keys. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.",
+            "type": "object"
+          }
+        }
+      },
+      "ParticipantPlayerBase": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "country": {
+                "description": "The country of the player (format is ISO 3166-1 alpha-2).",
+                "type": "string",
+                "nullable": true,
+                "example": "US"
+              },
+              "birth_date": {
+                "description": "The birth date of the player in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+                "type": "string",
+                "nullable": true,
+                "format": "date",
+                "example": "1996-08-01"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantProperties": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "type": "object",
+            "description": "Discipline features that define the specifics of the participant."
+          }
+        }
+      },
+      "ParticipantTeamLineupBase": {
+        "type": "object",
+        "properties": {
+          "lineup": {
+            "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/TeamPlayerParticipantBase"
+            }
+          }
+        }
+      },
+      "ParticipantTeamLineupManage": {
+        "type": "object",
+        "properties": {
+          "lineup": {
+            "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/TeamPlayerParticipantManage"
+            }
+          }
+        }
+      },
+      "ParticipantTeamLineupFully": {
+        "type": "object",
+        "properties": {
+          "lineup": {
+            "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+            "type": "array",
+            "items": {
+              "$ref": "#\/components\/schemas\/TeamPlayerParticipantFully"
+            }
+          }
+        }
+      },
+      "ParticipantTeamBase": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamLineupBase"
+          }
+        ]
+      },
+      "ParticipantPlayerUpdate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayerBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          }
+        ]
+      },
+      "ParticipantTeamUpdate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamLineupManage"
+          }
+        ]
+      },
+      "ParticipantPlayerCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayerBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "ParticipantTeamCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamLineupManage"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name"
+            ]
+          }
+        ]
+      },
+      "ParticipantPlayerFullyCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayerCreate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "player"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              },
+              "lineup": {
+                "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/TeamPlayerParticipantManage"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantTeamFullyCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamCreate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "player"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantPlayer": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayerBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "email",
+              "name",
+              "country",
+              "birth_date",
+              "user_id",
+              "custom_user_identifier",
+              "checked_in",
+              "custom_fields",
+              "created_at"
+            ],
+            "properties": {
+              "id": {
+                "description": "The id of the participant.",
+                "type": "string",
+                "example": "375143143408309123"
+              },
+              "user_id": {
+                "description": "The identifier of user associate to this participant.",
+                "type": "string",
+                "nullable": true,
+                "example": "145246939508809147"
+              },
+              "created_at": {
+                "description": "The date and time of the participant creation, in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "example": "2015-12-09T13:37:42+00:00"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantPlayerDetailed": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayer"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          },
+          {
+            "type": "object",
+            "required": [
+              "properties",
+              "checked_in_at"
+            ],
+            "properties": {
+              "checked_in_at": {
+                "description": "The date and time of the participant check-in, in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "2015-12-32T13:37:42+00:00"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantPlayerFully": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayer"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "player"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantPlayerDetailedFully": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantPlayerDetailed"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "team"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantTeam": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "email",
+              "name",
+              "user_id",
+              "custom_user_identifier",
+              "checked_in",
+              "custom_fields",
+              "lineup"
+            ],
+            "properties": {
+              "lineup": {
+                "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/TeamPlayerParticipant"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantTeamDetailed": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeam"
+          },
+          {
+            "type": "object",
+            "required": [
+              "checked_in_at"
+            ],
+            "properties": {
+              "checked_in_at": {
+                "description": "The date and time of the participant check-in, in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "2015-12-32T13:37:42+00:00"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantTeamFully": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeam"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "team"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "ParticipantTeamDetailedFully": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamDetailed"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantTeamLineupFully"
+          },
+          {
+            "type": "object",
+            "required": [
+              "type",
+              "tournament_id"
+            ],
+            "properties": {
+              "type": {
+                "description": "The type of participants who plays in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "player"
+                ],
+                "example": "team"
+              },
+              "tournament_id": {
+                "description": "The id of the tournament that contains this participant.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "TeamPlayerParticipantBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the team player.",
+            "type": "string",
+            "maxLength": 40,
+            "example": "Jon Snow"
+          },
+          "country": {
+            "description": "The country of the team player (format is ISO 3166-1 alpha-2).",
+            "type": "string",
+            "nullable": true,
+            "example": "US"
+          },
+          "birth_date": {
+            "description": "The birth date of the team player in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "example": "1996-08-01"
+          },
+          "custom_user_identifier": {
+            "description": "An external custom user identifier. Use the format that suits your needs.",
+            "type": "string",
+            "maxLength": 100,
+            "nullable": true,
+            "example": "acme:account:1234"
+          },
+          "email": {
+            "description": "The email of the team player.",
+            "type": "string",
+            "maxLength": 180,
+            "example": "jonanddaenerys@westeros.got"
+          },
+          "custom_fields": {
+            "description": "The values of the custom fields configured in the tournament using the machine names as keys. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.",
+            "type": "object"
+          }
+        }
+      },
+      "TeamPlayerParticipantManage": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamPlayerParticipantBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          }
+        ]
+      },
+      "TeamPlayerParticipant": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamPlayerParticipantBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "email",
+              "country",
+              "birth_date",
+              "user_id",
+              "custom_user_identifier",
+              "custom_fields"
+            ],
+            "properties": {
+              "user_id": {
+                "description": "The identifier of the user associated to this participant.",
+                "type": "string",
+                "nullable": true,
+                "example": "145246939508809147"
+              }
+            }
+          }
+        ]
+      },
+      "TeamPlayerParticipantFully": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamPlayerParticipant"
+          },
+          {
+            "$ref": "#\/components\/schemas\/ParticipantProperties"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "country",
+              "birth_date",
+              "custom_user_identifier",
+              "user_id",
+              "email",
+              "properties",
+              "custom_fields"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

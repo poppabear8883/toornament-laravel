@@ -1,0 +1,277 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "discipline"
+    },
+    {
+      "name": "organizer_disciplines"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Disciplines",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.0.2",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/disciplines": {
+      "get": {
+        "tags": [
+          "organizer_disciplines"
+        ],
+        "summary": "Retrieve the list of available disciplines and their basic information.",
+        "description": "Returns a collection of disciplines.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/disciplineRange"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Disciplines retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Discipline"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "\/disciplines\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_disciplines"
+        ],
+        "summary": "Retrieve a specific discipline, with advanced information.",
+        "description": "Returns a discipline with its information and configuration options.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/disciplineId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Discipline retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/DisciplineDetailed"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      }
+    },
+    "parameters": {
+      "disciplineRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "disciplines=0-49"
+        },
+        "description": "A range of requested items using the disciplines unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "disciplineId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the discipline."
+      }
+    },
+    "schemas": {
+      "Discipline": {
+        "required": [
+          "id",
+          "name",
+          "shortname",
+          "fullname",
+          "copyrights"
+        ],
+        "properties": {
+          "id": {
+            "description": "An identifier for a discipline, can be used in others APIs.",
+            "type": "string",
+            "example": "counterstrike_go"
+          },
+          "name": {
+            "description": "The official name of the discipline.",
+            "type": "string",
+            "example": "Counter-Strike: GO"
+          },
+          "shortname": {
+            "description": "The short name of the discipline.",
+            "type": "string",
+            "example": "CS:GO"
+          },
+          "fullname": {
+            "description": "The complete name of the discipline.",
+            "type": "string",
+            "example": "Counter-Strike: Global Offensive"
+          },
+          "copyrights": {
+            "description": "Name of the entity or entities that are the creators and\/or right holders of the discipline.",
+            "type": "string",
+            "example": "Valve Software"
+          }
+        }
+      },
+      "DisciplineDetailed": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/Discipline"
+          },
+          {
+            "type": "object",
+            "required": [
+              "platforms_available",
+              "team_size",
+              "features"
+            ],
+            "properties": {
+              "platforms_available": {
+                "description": "A list of platforms available of this discipline.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "pc",
+                    "playstation4",
+                    "xbox_one",
+                    "nintendo_switch",
+                    "mobile",
+                    "playstation3",
+                    "playstation2",
+                    "playstation1",
+                    "ps_vita",
+                    "psp",
+                    "xbox360",
+                    "xbox",
+                    "wii_u",
+                    "wii",
+                    "gamecube",
+                    "nintendo64",
+                    "snes",
+                    "nes",
+                    "dreamcast",
+                    "saturn",
+                    "megadrive",
+                    "master_system",
+                    "3ds",
+                    "ds",
+                    "game_boy",
+                    "neo_geo",
+                    "other_platform",
+                    "not_video_game"
+                  ]
+                },
+                "example": [
+                  "pc",
+                  "nintendo_switch",
+                  "neo_geo"
+                ]
+              },
+              "team_size": {
+                "description": "Sets the minimum and maximum of players in a team.",
+                "type": "object",
+                "required": [
+                  "min",
+                  "max"
+                ],
+                "properties": {
+                  "min": {
+                    "description": "Minimal size of a team in the tournament.",
+                    "type": "integer",
+                    "example": 4
+                  },
+                  "max": {
+                    "description": "Maximal size of a team in the tournament.",
+                    "type": "integer",
+                    "example": 4
+                  }
+                }
+              },
+              "features": {
+                "description": "List of features for the discipline.",
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/DisciplineFeature"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "DisciplineFeature": {
+        "required": [
+          "name",
+          "type",
+          "options"
+        ],
+        "properties": {
+          "name": {
+            "description": "Name of the feature.",
+            "type": "string",
+            "example": "track"
+          },
+          "type": {
+            "description": "Type of the feature.",
+            "type": "string",
+            "example": "map"
+          },
+          "options": {
+            "description": "Options of the feature.",
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

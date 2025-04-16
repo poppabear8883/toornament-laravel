@@ -1,0 +1,671 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "custom_field"
+    },
+    {
+      "name": "organizer_custom_fields"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Custom Fields",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.2.0",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/custom-fields": {
+      "get": {
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Retrieve all custom fields.",
+        "description": "Returns the complete definition of all custom fields for a given tournament. This includes both public and private custom fields. A custom field may be associated to a player, a team or a team\u0027s player. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/targetType"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIds"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/CustomFieldFully"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Create a new custom field in a tournament.",
+        "description": "Create a new custom field in a tournament. You can not have more than 128 custom fields in a tournament.",
+        "requestBody": {
+          "description": "Data to provide for create the custom field.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CustomFieldCreateFully"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomFieldFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/custom-fields\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Retrieve a single custom field of a tournament.",
+        "description": "Returns a single custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomFieldFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Update a single custom field of a tournament.",
+        "description": "Update a single custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide for update the custom field.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CustomFieldBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomFieldFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Delete a custom field of a tournament.",
+        "description": "Delete a custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/custom-fields": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Retrieve the custom fields of a tournament.",
+        "description": "Returns the complete definition of all custom fields for a given tournament. This includes both public and private custom fields. A custom field may be associated to a player, a team or a team\u0027s player. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/targetType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/CustomField"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Create a new custom field in a tournament.",
+        "description": "Create a new custom field in a tournament. You can not have more than 128 custom fields in a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide for create the custom field.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CustomFieldCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomField"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/custom-fields\/{id}": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Retrieve a single custom field of a tournament.",
+        "description": "Returns a single custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomField"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Update a single custom field of a tournament.",
+        "description": "Update a single custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide for update the custom field.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/CustomFieldBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/CustomField"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "deprecated": true,
+        "tags": [
+          "organizer_custom_fields"
+        ],
+        "summary": "Delete a custom field of a tournament.",
+        "description": "Delete a custom field of a tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customFieldId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with \u0027organizer:admin\u0027 scope (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:admin": "Grants the ability to create tournament and edit settings."
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:admin": "Grants the ability to create tournament and edit settings."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "tournamentId": {
+        "name": "tournament_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the tournament you want to retrieve data about."
+      },
+      "customFieldId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the requested custom field."
+      },
+      "customFieldRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "custom-fields=0-49"
+        },
+        "description": "A range of requested items using the \u0027custom-fields\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "targetType": {
+        "name": "target_type",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "player",
+            "team",
+            "team_player"
+          ],
+          "example": "team"
+        },
+        "description": "The entity affected by the custom fields."
+      },
+      "tournamentIds": {
+        "name": "tournament_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return reports for the given list of tournaments."
+      }
+    },
+    "schemas": {
+      "CustomFieldBase": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "description": "The display name of a custom field in forms.",
+            "type": "string",
+            "maxLength": 255,
+            "example": "My Steam ID"
+          },
+          "default_value": {
+            "description": "A default value (can be array, scalar or null).",
+            "nullable": true,
+            "anyOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "boolean"
+              }
+            ],
+            "example": "#steam_id"
+          },
+          "required": {
+            "description": "Whether the custom field is required.",
+            "type": "boolean",
+            "example": false
+          },
+          "public": {
+            "description": "Whether the value of the custom field is public.",
+            "type": "boolean",
+            "example": false
+          },
+          "position": {
+            "description": "The position of the field in forms.",
+            "type": "integer",
+            "example": 5
+          },
+          "options": {
+            "description": "Options of the custom field.",
+            "type": "object"
+          }
+        }
+      },
+      "CustomFieldCreate": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/CustomFieldBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "machine_name",
+              "label",
+              "type"
+            ],
+            "properties": {
+              "machine_name": {
+                "description": "A name used to identify a custom field for computing purposes.",
+                "type": "string",
+                "pattern": "^[a-z0-9_]+$",
+                "maxLength": 255,
+                "example": "my_steam_id"
+              },
+              "type": {
+                "description": "A data type used for both input and computing.",
+                "type": "string",
+                "example": "steam_player_id"
+              },
+              "target_type": {
+                "description": "The entity concerned by the custom field.",
+                "example": "player",
+                "type": "string",
+                "enum": [
+                  "player",
+                  "team",
+                  "team_player"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "CustomFieldCreateFully": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/CustomFieldCreate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "target_type",
+              "tournament_id"
+            ],
+            "properties": {
+              "tournament_id": {
+                "description": "The id of tournament.",
+                "type": "string",
+                "example": "534138941862841533"
+              }
+            }
+          }
+        ]
+      },
+      "CustomField": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/CustomFieldCreate"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "target_type",
+              "default_value",
+              "required",
+              "public",
+              "position",
+              "options"
+            ],
+            "properties": {
+              "id": {
+                "description": "The unique identifier of the custom field.",
+                "type": "string",
+                "example": "128114939547269789"
+              }
+            }
+          }
+        ]
+      },
+      "CustomFieldFully": {
+        "type": "object",
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/CustomField"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tournament_id"
+            ],
+            "properties": {
+              "tournament_id": {
+                "description": "The id of tournament.",
+                "type": "string",
+                "example": "534138941862841533"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

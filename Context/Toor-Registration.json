@@ -1,0 +1,1100 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "registration"
+    },
+    {
+      "name": "organizer_registrations"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Registrations",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.3.0",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/registrations": {
+      "get": {
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Retrieves all registrations of all your tournaments.",
+        "description": "Retrieves all registrations of all your tournaments.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/registrationRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/statuses"
+          },
+          {
+            "$ref": "#\/components\/parameters\/userIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/teamIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customUserIdentifiers"
+          },
+          {
+            "$ref": "#\/components\/parameters\/registrationSort"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Registrations retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#\/components\/schemas\/PlayerRegistration"
+                      },
+                      {
+                        "$ref": "#\/components\/schemas\/TeamRegistration"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Create a new registration.",
+        "description": "Creates a new registration. The participant type of the tournament defines whether it expects a player or a team in the request body. If the registrations are disabled or closed, the endpoint will return a 403 (Access Denied).\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/customFieldRequired"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide to create the registration.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/PlayerRegistrationFullyCreate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TeamRegistrationFullyCreate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration created",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      }
+    },
+    "\/registrations\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Retrieves a registration.",
+        "description": "Retrieves a registration identified by the given id. If the registration does not exist or is not associated to the tournament, the endpoint will return a 404 (Not Found).",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registration retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Updates a registration.",
+        "description": "Updates a registration identified by the given id. For status changes conditions, see this [Registration guide](https:\/\/help.toornament.com\/participant\/edit-or-cancel-your-registration).\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customFieldRequired"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide for update the registration.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/PlayerRegistrationUpdate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TeamRegistrationUpdate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Registration updated.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Deletes a registration.",
+        "description": "Deletes a registration identified by the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/registrations": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Retrieve the registrations of a tournament.",
+        "description": "Returns the registrations of the given tournament.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/registrationRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/registrationSort"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Registrations retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "$ref": "#\/components\/schemas\/PlayerRegistration"
+                      },
+                      {
+                        "$ref": "#\/components\/schemas\/TeamRegistration"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "deprecated": true,
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Create a new registration in a tournament.",
+        "description": "Creates a new registration. The participant type of the tournament defines whether it expects a player or a team in the request body. If the registrations are disabled or closed, the endpoint will return a 403 (Access Denied).\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide to create the registration.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/PlayerRegistrationCreate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TeamRegistrationCreate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Registration created",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{tournament_id}\/registrations\/{id}": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Retrieve a registration of a tournament.",
+        "description": "Returns a registration with the given id and tournament. If the registration does not exist or is not associated to the tournament, the endpoint will return a 404 (Not Found).\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Registration retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "deprecated": true,
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Update a registration.",
+        "description": "Updates a registration identified by the given id. For status changes conditions, see this [Registration guide](https:\/\/help.toornament.com\/participant\/edit-or-cancel-your-registration).\n",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          }
+        ],
+        "requestBody": {
+          "description": "Data to provide for update the registration.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/PlayerRegistrationUpdate"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TeamRegistrationUpdate"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Regiostration updated.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/PlayerRegistration"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TeamRegistration"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "deprecated": true,
+        "tags": [
+          "organizer_registrations"
+        ],
+        "summary": "Delete a registration from a tournament.",
+        "description": "Deletes the registration identified by the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/registrationId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:registration"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with \u0027organizer:registration\u0027 scope (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:registration": "Grants the ability to list tournament and see settings."
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:registration": "Grants the ability to list tournament and see settings."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "registrationRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "registrations=0-49"
+        },
+        "description": "A range of requested items using the \u0027registrations\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "tournamentId": {
+        "name": "tournament_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the tournament containing the registration."
+      },
+      "registrationId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The unique identifier of the registration to retrieve."
+      },
+      "registrationSort": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "created_asc",
+            "created_desc"
+          ],
+          "default": "created_asc"
+        },
+        "description": "Sorts the registrations depending on their creation date. \u0022scheduled_asc\u0022 sorts the registrations from the oldest to the most recent one; \u0022scheduled_desc\u0022 sorts them from the most recent to the oldest one."
+      },
+      "tournamentIds": {
+        "name": "tournament_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return registrations for the given list of tournaments."
+      },
+      "statuses": {
+        "name": "statuses",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "enum": [
+            "pending",
+            "accepted",
+            "cancelled",
+            "refused"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "example": "pending,accepted"
+        },
+        "description": "One or several registrations statuses to filter."
+      },
+      "userIds": {
+        "name": "user_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "475141143408399456,735147043408391234"
+        },
+        "description": "Only return registrations for the given list of player user ids."
+      },
+      "teamIds": {
+        "name": "team_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "561714159547269773,255149043401714321"
+        },
+        "description": "Only return registrations for the given list of team ids."
+      },
+      "customUserIdentifiers": {
+        "name": "custom_user_identifiers",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "acme:account:1234,acme:account:1235"
+        },
+        "description": "A list of external custom user identifiers."
+      },
+      "customFieldRequired": {
+        "name": "custom_field_required",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ],
+          "default": 0
+        },
+        "description": "Allow required custom fields empty"
+      }
+    },
+    "schemas": {
+      "RegistrationBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the registration.",
+            "type": "string",
+            "maxLength": 40,
+            "example": "A team player name"
+          },
+          "email": {
+            "description": "The email of the team player.",
+            "type": "string",
+            "maxLength": 180,
+            "nullable": true,
+            "example": "player_1@team.com"
+          },
+          "custom_user_identifier": {
+            "description": "An external custom user identifier. Use the format that suits your needs.",
+            "type": "string",
+            "maxLength": 100,
+            "nullable": true,
+            "example": "acme:account:1234"
+          },
+          "properties": {
+            "type": "object",
+            "description": "Discipline features that define the specifics of the registration."
+          },
+          "custom_fields": {
+            "description": "The values of the custom fields configured in the tournament using the machine names as keys. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.",
+            "type": "object"
+          }
+        }
+      },
+      "RegistrationTournamentId": {
+        "type": "object",
+        "properties": {
+          "tournament_id": {
+            "description": "The id of the tournament.",
+            "type": "string",
+            "example": "378426939508809728"
+          }
+        }
+      },
+      "RegistrationParticipantId": {
+        "type": "object",
+        "properties": {
+          "participant_id": {
+            "description": "The id of the participant.",
+            "type": "string",
+            "nullable": true,
+            "example": "375143143408309123"
+          }
+        }
+      },
+      "RegistrationType": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "The type of participants that play in the tournament.",
+            "type": "string",
+            "enum": [
+              "team",
+              "player"
+            ],
+            "example": "team"
+          }
+        }
+      },
+      "RegistrationStatus": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "The status of the registration.",
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "refused",
+              "cancelled"
+            ],
+            "example": "pending"
+          }
+        }
+      },
+      "RegistrationUserId": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "description": "The identifier of the user associated to this registration.",
+            "type": "string",
+            "nullable": true,
+            "example": "145246939508809147"
+          }
+        }
+      },
+      "RegistrationCreatedAt": {
+        "type": "object",
+        "properties": {
+          "created_at": {
+            "description": "The date and time of the registration creation, in RFC 3339 format (combined date, time and utc offset).",
+            "type": "string",
+            "format": "datetime",
+            "example": "2015-12-09T13:37:42+00:00"
+          }
+        }
+      },
+      "PlayerRegistrationBase": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/RegistrationBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "country": {
+                "description": "The country of the player (format is ISO 3166-1 alpha-2).",
+                "type": "string",
+                "nullable": true,
+                "example": "GB"
+              },
+              "birth_date": {
+                "description": "The birth date of the player in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+                "type": "string",
+                "nullable": true,
+                "format": "date",
+                "example": "2001-02-28"
+              }
+            }
+          }
+        ]
+      },
+      "TeamRegistrationBase": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/RegistrationBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "lineup": {
+                "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/RegistrationTeamPlayerBase"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "PlayerRegistrationCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/PlayerRegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationType"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ]
+          }
+        ]
+      },
+      "TeamRegistrationCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamRegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationType"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "type",
+              "lineup"
+            ]
+          }
+        ]
+      },
+      "PlayerRegistrationFullyCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/PlayerRegistrationCreate"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationTournamentId"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tournament_id",
+              "name",
+              "type"
+            ]
+          }
+        ]
+      },
+      "TeamRegistrationFullyCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamRegistrationCreate"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationTournamentId"
+          },
+          {
+            "type": "object",
+            "required": [
+              "tournament_id",
+              "name",
+              "type",
+              "lineup"
+            ]
+          }
+        ]
+      },
+      "PlayerRegistrationUpdate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/PlayerRegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationStatus"
+          }
+        ]
+      },
+      "TeamRegistrationUpdate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TeamRegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationStatus"
+          }
+        ]
+      },
+      "PlayerRegistration": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/PlayerRegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationTournamentId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationParticipantId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationUserId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationType"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationStatus"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationCreatedAt"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "tournament_id",
+              "participant_id",
+              "user_id",
+              "custom_user_identifier",
+              "name",
+              "email",
+              "country",
+              "birth_date",
+              "type",
+              "status",
+              "properties",
+              "custom_fields",
+              "created_at"
+            ]
+          }
+        ]
+      },
+      "TeamRegistration": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/RegistrationBase"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationTournamentId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationParticipantId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationUserId"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationType"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationStatus"
+          },
+          {
+            "$ref": "#\/components\/schemas\/RegistrationCreatedAt"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "tournament_id",
+              "participant_id",
+              "user_id",
+              "custom_user_identifier",
+              "name",
+              "email",
+              "country",
+              "birth_date",
+              "type",
+              "status",
+              "properties",
+              "custom_fields",
+              "lineup",
+              "created_at"
+            ],
+            "properties": {
+              "lineup": {
+                "description": "A list of players in a team (Only if the tournament participant type is \u201cteam\u201d).",
+                "type": "array",
+                "items": {
+                  "$ref": "#\/components\/schemas\/RegistrationTeamPlayer"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "RegistrationTeamPlayerBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the team player.",
+            "type": "string",
+            "maxLength": 40,
+            "nullable": true,
+            "example": "A team player name"
+          },
+          "email": {
+            "description": "The email of the team player.",
+            "type": "string",
+            "maxLength": 180,
+            "nullable": true,
+            "example": "player_1@team.com"
+          },
+          "country": {
+            "description": "The country of the team player (format is ISO 3166-1 alpha-2).",
+            "type": "string",
+            "nullable": true,
+            "example": "GB"
+          },
+          "birth_date": {
+            "description": "The birth date of the team player in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "example": "2001-02-28"
+          },
+          "custom_user_identifier": {
+            "description": "An external custom user identifier. Use the format that suits your needs.",
+            "type": "string",
+            "maxLength": 100,
+            "nullable": true,
+            "example": "acme:account:1234"
+          },
+          "properties": {
+            "type": "object",
+            "description": "Discipline features that define the specifics of the registration."
+          },
+          "custom_fields": {
+            "description": "The values of the custom fields configured in the tournament using the machine names as keys. For more information, please read the [Custom Fields](https:\/\/developer.toornament.com\/v2\/core-concepts\/custom-fields) documentation.",
+            "type": "object"
+          }
+        }
+      },
+      "RegistrationTeamPlayer": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/RegistrationTeamPlayerBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "name",
+              "email",
+              "country",
+              "birth_date",
+              "user_id",
+              "custom_user_identifier",
+              "properties",
+              "custom_fields"
+            ],
+            "properties": {
+              "user_id": {
+                "description": "The identifier of the user associated to this team player.",
+                "type": "string",
+                "nullable": true,
+                "example": "145246939508809147"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

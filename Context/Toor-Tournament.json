@@ -1,0 +1,1630 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "tournament"
+    },
+    {
+      "name": "organizer_tournaments"
+    },
+    {
+      "name": "tournament_api"
+    }
+  ],
+  "info": {
+    "title": "Tournaments",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.5.2",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/tournaments": {
+      "get": {
+        "tags": [
+          "organizer_tournaments"
+        ],
+        "summary": "Retrieve the tournaments you organize and have organized.",
+        "description": "Returns tournaments you organize with all organizer-specific data.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentDisciplines"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentStatuses"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentScheduledBefore"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentScheduledAfter"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentCountries"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentPlatforms"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIsOnline"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIsArchived"
+          },
+          {
+            "$ref": "#\/components\/parameters\/userIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/teamIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/customUserIdentifiers"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitSeasonIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitSeasonNames"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitRegionIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitRegionNames"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitTierIds"
+          },
+          {
+            "$ref": "#\/components\/parameters\/circuitTierNames"
+          },
+          {
+            "$ref": "#\/components\/parameters\/tournamentSort"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Tournaments retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Tournament"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:view"
+            ]
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_tournaments"
+        ],
+        "summary": "Create a new tournament as the organizer.",
+        "description": "Creates a new tournament.",
+        "requestBody": {
+          "description": "Tournament data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentCreateSingle"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentCreateTeam"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tournament created.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedSingle"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedTeam"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/tournaments\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_tournaments"
+        ],
+        "summary": "Retrieve a single tournament you organize.",
+        "description": "Returns a tournament identified with the given id with all organizer-specific data.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tournament retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedSingle"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedTeam"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:view"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_tournaments"
+        ],
+        "summary": "Update one of your tournaments.",
+        "description": "Updates one or several fields of one of your tournaments.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "requestBody": {
+          "description": "Tournament data.",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentUpdateSingle"
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentUpdateTeam"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedSingle"
+                    },
+                    {
+                      "$ref": "#\/components\/schemas\/TournamentDetailedTeam"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_tournaments"
+        ],
+        "summary": "Delete one of your tournaments.",
+        "description": "Deletes your tournament identified by the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:delete"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with \u0027organizer:view\u0027 or \u0027organizer:admin\u0027 or \u0027organizer:delete\u0027  scope (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:view": "Grants the ability to list tournament and see settings.",
+              "organizer:admin": "Grants the ability to create tournament and edit settings.",
+              "organizer:delete": "Grants the ability to delete tournaments."
+            }
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token",
+            "scopes": {
+              "organizer:view": "Grants the ability to list tournament and see settings.",
+              "organizer:admin": "Grants the ability to create tournament and edit settings.",
+              "organizer:delete": "Grants the ability to delete tournaments."
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "tournamentRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "tournaments=0-49"
+        },
+        "description": "A range of requested items using the \u0027tournaments\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "contentLanguage": {
+        "name": "Content-language",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "en-US"
+        },
+        "description": "The language multilanguage content should be set."
+      },
+      "acceptlanguage": {
+        "name": "Accept-language",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "en-US,en;q=0.5"
+        },
+        "description": "The language multilanguage content should be return."
+      },
+      "tournamentId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the tournament."
+      },
+      "playlistId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The string id of the tournament."
+      },
+      "tournamentDisciplines": {
+        "name": "disciplines",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "string",
+          "example": "counterstrike_go,fifa17"
+        },
+        "description": "One or several disciplines to filter."
+      },
+      "tournamentStatuses": {
+        "name": "statuses",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "running",
+            "completed"
+          ],
+          "example": "pending,running"
+        },
+        "description": "One or several tournament statuses to filter."
+      },
+      "tournamentScheduledBefore": {
+        "name": "scheduled_before",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "An ISO 8601 date (only the date part, with YYYY-MM-DD pattern) to include all tournaments scheduled to take place before or at the date."
+      },
+      "tournamentScheduledAfter": {
+        "name": "scheduled_after",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "format": "date"
+        },
+        "description": "An ISO 8601 date (only the date part, with YYYY-MM-DD pattern) to include all tournaments scheduled to take place after or at the date."
+      },
+      "tournamentCountries": {
+        "name": "countries",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "string",
+          "example": "US,CA"
+        },
+        "description": "One or several countries to filter, with format ISO 3166-1 alpha-2 country codes."
+      },
+      "tournamentPlatforms": {
+        "name": "platforms",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "pc",
+            "playstation4",
+            "playstation5",
+            "xbox_one",
+            "xbox_series",
+            "nintendo_switch",
+            "mobile",
+            "playstation3",
+            "xbox360",
+            "playstation2",
+            "playstation1",
+            "ps_vita",
+            "psp",
+            "xbox",
+            "wii_u",
+            "wii",
+            "gamecube",
+            "nintendo64",
+            "snes",
+            "nes",
+            "3ds",
+            "ds",
+            "game_boy",
+            "dreamcast",
+            "saturn",
+            "megadrive",
+            "master_system",
+            "neo_geo",
+            "other_platform",
+            "not_video_game"
+          ],
+          "example": "pc,xbox_one,playstation4"
+        },
+        "description": "One or several platforms to filter."
+      },
+      "tournamentIsOnline": {
+        "name": "is_online",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "description": "Whether the tournament is played online."
+      },
+      "tournamentIsArchived": {
+        "name": "archived",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "enum": [
+            0,
+            1
+          ]
+        },
+        "description": "Whether to include archived tournaments."
+      },
+      "userIds": {
+        "name": "user_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "475141143408399456,735147043408391234"
+        },
+        "description": "One or several player user ids involved in the tournaments to filter."
+      },
+      "teamIds": {
+        "name": "team_ids",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "561714159547269773,255149043401714321"
+        },
+        "description": "One or several team ids involved in the tournaments to filter."
+      },
+      "customUserIdentifiers": {
+        "name": "custom_user_identifiers",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "acme:account:1234"
+        },
+        "description": "One or several custom user identifiers involved in the tournaments to filter."
+      },
+      "tournamentIds": {
+        "name": "tournament_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "378426939508809728,534138941862841533"
+        },
+        "description": "Only return tournaments for the given list of ids."
+      },
+      "circuitIds": {
+        "name": "circuit_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "5617559294676615168,5629045554450325504"
+        },
+        "description": "Only return circuits for the given list of circuit ids."
+      },
+      "circuitSeasonIds": {
+        "name": "circuit_season_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "5617559294676615168,5629045554450325504"
+        },
+        "description": "Only return tournaments for the given list of season ids."
+      },
+      "circuitSeasonNames": {
+        "name": "circuit_season_names",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "season_1,season_3"
+        },
+        "description": "One or several machine name of seasons to filter."
+      },
+      "circuitRegionIds": {
+        "name": "circuit_region_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "5617559294676615168,5629045554450325504"
+        },
+        "description": "Only return tournaments for the given list of region ids."
+      },
+      "circuitRegionNames": {
+        "name": "circuit_region_names",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "europe,americas,asia"
+        },
+        "description": "One or several machine name of regions to filter."
+      },
+      "circuitTierIds": {
+        "name": "circuit_tier_ids",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "5617559294676615168,5629045554450325504"
+        },
+        "description": "Only return tournaments for the given list of tier ids."
+      },
+      "circuitTierNames": {
+        "name": "circuit_tier_names",
+        "in": "query",
+        "required": false,
+        "explode": false,
+        "style": "form",
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": "tier_1,tier_2"
+        },
+        "description": "One or several machine name of tiers to filter."
+      },
+      "tournamentSort": {
+        "name": "sort",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "scheduled_asc",
+            "scheduled_desc"
+          ],
+          "default": "scheduled_asc"
+        },
+        "description": "Sorts the collection in a particular order. \u0022scheduled_asc\u0022 sorts the tournaments by scheduled date from the oldest to the most recent one; \u0022scheduled_desc\u0022 sorts the tournaments by scheduled date from the most recent to the oldest one."
+      }
+    },
+    "schemas": {
+      "TournamentBase": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "The name of the tournament.",
+            "type": "string",
+            "maxLength": 30,
+            "example": "My Weekly Tournament"
+          },
+          "full_name": {
+            "description": "The complete name of the tournament.",
+            "type": "string",
+            "maxLength": 80,
+            "nullable": true,
+            "example": "My Weekly Tournament - Long title"
+          },
+          "scheduled_date_start": {
+            "description": "A starting date in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "example": "2015-09-06"
+          },
+          "scheduled_date_end": {
+            "description": "An ending date in ISO 8601 format (only the date part, with YYYY-MM-DD pattern).",
+            "type": "string",
+            "nullable": true,
+            "format": "date",
+            "example": "2015-09-07"
+          },
+          "timezone": {
+            "description": "A time zone from the IANA tz database. For more information, please read the [Time Zones](https:\/\/developer.toornament.com\/v2\/core-concepts\/time-zones) documentation.",
+            "type": "string",
+            "example": "America\/Sao_Paulo"
+          },
+          "public": {
+            "description": "Whether the tournament is published or not.",
+            "type": "boolean",
+            "example": true
+          },
+          "size": {
+            "description": "The expected number of participants in the tournament.",
+            "type": "integer",
+            "example": 16
+          },
+          "online": {
+            "description": "Whether the tournament is played on internet or not.",
+            "type": "boolean",
+            "nullable": true,
+            "example": true
+          },
+          "location": {
+            "description": "The region, city, address or place of interest where the tournament is held.",
+            "type": "string",
+            "nullable": true,
+            "example": "London"
+          },
+          "country": {
+            "description": "The country where the tournament is played. Some codes may not be supported. (format is ISO 3166-1 alpha-2)",
+            "type": "string",
+            "nullable": true,
+            "example": "GB"
+          },
+          "registration_enabled": {
+            "description": "Whether the registration process is enabled.",
+            "type": "boolean",
+            "example": true
+          },
+          "registration_opening_datetime": {
+            "description": "The opening date of the registrations in RFC 3339 format (combined date, time and utc offset)",
+            "type": "string",
+            "nullable": true,
+            "format": "datetime",
+            "example": "1999-01-01T00:00:00+00:00"
+          },
+          "registration_closing_datetime": {
+            "description": "The closing date of the registrations in RFC 3339 format (combined date, time and utc offset)",
+            "type": "string",
+            "nullable": true,
+            "format": "datetime",
+            "example": "1999-01-01T00:00:00+00:00"
+          }
+        }
+      },
+      "Tournament": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "discipline",
+              "name",
+              "full_name",
+              "status",
+              "scheduled_date_start",
+              "scheduled_date_end",
+              "timezone",
+              "public",
+              "size",
+              "online",
+              "location",
+              "country",
+              "platforms",
+              "logo",
+              "registration_enabled",
+              "registration_opening_datetime",
+              "registration_closing_datetime"
+            ],
+            "properties": {
+              "id": {
+                "description": "The unique identifier of the tournament.",
+                "type": "string",
+                "example": "378426939508809728"
+              },
+              "discipline": {
+                "description": "A unique identifier of the tournament\u2019s discipline.",
+                "type": "string",
+                "example": "my_discipline"
+              },
+              "status": {
+                "description": "The status of the tournament.",
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "running",
+                  "completed"
+                ],
+                "example": "running"
+              },
+              "platforms": {
+                "description": "The platform on which the tournament will be played.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "pc",
+                    "playstation4",
+                    "xbox_one",
+                    "nintendo_switch",
+                    "mobile",
+                    "playstation3",
+                    "playstation2",
+                    "playstation1",
+                    "ps_vita",
+                    "psp",
+                    "xbox360",
+                    "xbox",
+                    "wii_u",
+                    "wii",
+                    "gamecube",
+                    "nintendo64",
+                    "snes",
+                    "nes",
+                    "dreamcast",
+                    "saturn",
+                    "megadrive",
+                    "master_system",
+                    "3ds",
+                    "ds",
+                    "game_boy",
+                    "neo_geo",
+                    "other_platform",
+                    "not_video_game"
+                  ]
+                },
+                "example": [
+                  "pc"
+                ]
+              },
+              "logo": {
+                "allOf": [
+                  {
+                    "description": "The tournament logo in every available format."
+                  },
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentLogo"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TournamentUpdateSingle": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "organization": {
+                "description": "The name of the organizer, be it an individual, group, association or company.",
+                "type": "string",
+                "nullable": true,
+                "example": "Avery Bullock"
+              },
+              "contact": {
+                "description": "The email address to contact the organizer.",
+                "type": "string",
+                "nullable": true,
+                "example": "contact@toornament.com"
+              },
+              "discord": {
+                "description": "Invite URL to the tournament Discord server.",
+                "type": "string",
+                "nullable": true,
+                "example": "https:\/\/discord.gg\/blablabla"
+              },
+              "website": {
+                "description": "The tournament\u0027s official website URL.",
+                "type": "string",
+                "nullable": true,
+                "example": "http:\/\/www.toornament.com"
+              },
+              "description": {
+                "description": "A description of the tournament.",
+                "type": "string",
+                "maxLength": 1500,
+                "nullable": true,
+                "example": "My description \n on multiple lines"
+              },
+              "rules": {
+                "description": "The rules of the tournament.",
+                "type": "string",
+                "maxLength": 64000,
+                "nullable": true,
+                "example": "My rules \n on multiple lines"
+              },
+              "prize": {
+                "description": "The prizes of the tournament.",
+                "type": "string",
+                "maxLength": 1500,
+                "nullable": true,
+                "example": "1 - 10,000$ \n 2 - 5,000$"
+              },
+              "match_report_enabled": {
+                "description": "Whether the participant\u0027s match report is enabled or not.",
+                "type": "boolean",
+                "example": false
+              },
+              "registration_enabled": {
+                "description": "Whether the registration process is enabled.",
+                "type": "boolean",
+                "example": true
+              },
+              "registration_auto_accept_enabled": {
+                "description": "Whether to automatically accept new registrations in the tournament or not.",
+                "type": "boolean",
+                "example": false
+              },
+              "registration_opening_datetime": {
+                "description": "The opening date of the registrations in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "1999-01-01T00:00:00+00:00"
+              },
+              "registration_closing_datetime": {
+                "description": "The closing date of the registrations in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "1999-01-01T00:00:00+00:00"
+              },
+              "check_in_enabled": {
+                "description": "Whether to enable the check-in or not.",
+                "type": "boolean",
+                "example": true
+              },
+              "check_in_participant_enabled": {
+                "description": "Whether to enable the check-in for participants or not.",
+                "type": "boolean",
+                "example": true
+              },
+              "check_in_participant_start_datetime": {
+                "description": "The date and time of the start of the participant check-in, in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "1999-01-01T00:00:00+00:00"
+              },
+              "check_in_participant_end_datetime": {
+                "description": "The date and time of the end of the participant check-in, in RFC 3339 format (combined date, time and utc offset).",
+                "type": "string",
+                "format": "datetime",
+                "nullable": true,
+                "example": "1999-01-01T00:00:00+00:00"
+              },
+              "archived": {
+                "description": "Whether the tournament is archived or not.",
+                "type": "boolean",
+                "example": false
+              },
+              "registration_notification_enabled": {
+                "description": "Whether to notify organizers when new registrations occur or not.",
+                "type": "boolean",
+                "example": true
+              },
+              "registration_participant_email_enabled": {
+                "description": "Whether to notify participants when they register to a tournament, and when their registration status changes.",
+                "type": "boolean",
+                "example": true
+              },
+              "registration_request_message": {
+                "description": "The message provided by the organizer for people who want to register.",
+                "type": "string",
+                "nullable": true,
+                "example": "For more info, go there -\u003E []"
+              },
+              "registration_acceptance_message": {
+                "description": "The message sent to a player when his registration is accepted.",
+                "type": "string",
+                "nullable": true,
+                "example": "You must now follow the next steps -\u003E []"
+              },
+              "registration_refusal_message": {
+                "description": "The message sent to a player when his registration is refused.",
+                "type": "string",
+                "nullable": true,
+                "example": "Sorry, your registration has been refused."
+              },
+              "registration_terms_enabled": {
+                "description": "Whether custom \u0027terms of use\u0027 are required.",
+                "type": "boolean",
+                "example": true
+              },
+              "registration_terms_url": {
+                "description": "If enabled, the URL of the custom \u0027terms of use\u0027.",
+                "type": "string",
+                "nullable": true,
+                "example": "http:\/\/download.my\/terms.pdf"
+              },
+              "registration_permanent_team_mandatory": {
+                "description": "Whether registration only allow permanent team.",
+                "type": "boolean",
+                "example": false
+              },
+              "logo": {
+                "allOf": [
+                  {
+                    "description": "The tournament logo."
+                  },
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentLogoBase"
+                  }
+                ]
+              },
+              "background": {
+                "allOf": [
+                  {
+                    "description": "The tournament background (Pro Plan and above)."
+                  },
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentBackgroundBase"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TournamentCreateSingle": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentUpdateSingle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "discipline",
+              "name",
+              "participant_type",
+              "size",
+              "timezone",
+              "platforms"
+            ],
+            "properties": {
+              "discipline": {
+                "description": "A unique identifier of the tournament\u2019s discipline.",
+                "type": "string",
+                "example": "counterstrike_go"
+              },
+              "participant_type": {
+                "description": "The type of participants that play in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "single"
+                ],
+                "example": "single"
+              },
+              "platforms": {
+                "description": "The platform on which the tournament will be played.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "pc",
+                    "playstation4",
+                    "xbox_one",
+                    "nintendo_switch",
+                    "mobile",
+                    "playstation3",
+                    "playstation2",
+                    "playstation1",
+                    "ps_vita",
+                    "psp",
+                    "xbox360",
+                    "xbox",
+                    "wii_u",
+                    "wii",
+                    "gamecube",
+                    "nintendo64",
+                    "snes",
+                    "nes",
+                    "dreamcast",
+                    "saturn",
+                    "megadrive",
+                    "master_system",
+                    "3ds",
+                    "ds",
+                    "game_boy",
+                    "neo_geo",
+                    "other_platform",
+                    "not_video_game"
+                  ]
+                },
+                "example": [
+                  "pc"
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TournamentCreateTeam": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentCreateSingle"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "team_min_size": {
+                "description": "The smallest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 2
+              },
+              "team_max_size": {
+                "description": "The largest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 5
+              }
+            }
+          }
+        ]
+      },
+      "TournamentUpdateTeam": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentUpdateSingle"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "team_min_size": {
+                "description": "The smallest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 2
+              },
+              "team_max_size": {
+                "description": "The largest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 5
+              }
+            }
+          }
+        ]
+      },
+      "TournamentDetailedSingle": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentUpdateSingle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "discipline",
+              "name",
+              "full_name",
+              "description",
+              "rules",
+              "status",
+              "participant_type",
+              "organization",
+              "contact",
+              "discord",
+              "website",
+              "online",
+              "location",
+              "country",
+              "size",
+              "prize",
+              "scheduled_date_start",
+              "scheduled_date_end",
+              "timezone",
+              "public",
+              "logo",
+              "background",
+              "platforms",
+              "featured",
+              "archived",
+              "match_report_enabled",
+              "registration_enabled",
+              "registration_auto_accept_enabled",
+              "registration_opening_datetime",
+              "registration_closing_datetime",
+              "registration_notification_enabled",
+              "registration_participant_email_enabled",
+              "registration_request_message",
+              "registration_acceptance_message",
+              "registration_refusal_message",
+              "registration_terms_enabled",
+              "registration_terms_url",
+              "registration_permanent_team_mandatory",
+              "check_in_enabled",
+              "check_in_participant_enabled",
+              "check_in_participant_start_datetime",
+              "check_in_participant_end_datetime",
+              "circuit",
+              "circuit_season",
+              "circuit_region",
+              "circuit_tier"
+            ],
+            "properties": {
+              "id": {
+                "description": "The unique identifier of the tournament.",
+                "type": "string",
+                "example": "378426939508809728"
+              },
+              "discipline": {
+                "description": "A unique identifier of the tournament\u2019s discipline.",
+                "type": "string",
+                "example": "my_discipline"
+              },
+              "status": {
+                "description": "The status of the tournament.",
+                "type": "string",
+                "enum": [
+                  "pending",
+                  "running",
+                  "completed"
+                ],
+                "example": "running"
+              },
+              "participant_type": {
+                "description": "The type of participants that play in the tournament.",
+                "type": "string",
+                "enum": [
+                  "team",
+                  "single"
+                ],
+                "example": "single"
+              },
+              "platforms": {
+                "description": "The platform on which the tournament will be played.",
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "pc",
+                    "playstation4",
+                    "xbox_one",
+                    "nintendo_switch",
+                    "mobile",
+                    "playstation3",
+                    "playstation2",
+                    "playstation1",
+                    "ps_vita",
+                    "psp",
+                    "xbox360",
+                    "xbox",
+                    "wii_u",
+                    "wii",
+                    "gamecube",
+                    "nintendo64",
+                    "snes",
+                    "nes",
+                    "dreamcast",
+                    "saturn",
+                    "megadrive",
+                    "master_system",
+                    "3ds",
+                    "ds",
+                    "game_boy",
+                    "neo_geo",
+                    "other_platform",
+                    "not_video_game"
+                  ]
+                },
+                "example": [
+                  "pc"
+                ]
+              },
+              "featured": {
+                "description": "Whether the tournament is featured or not.",
+                "type": "boolean",
+                "example": true
+              },
+              "circuit": {
+                "allOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/Circuit"
+                  },
+                  {
+                    "type": "object",
+                    "description": "The circuit associated with this tournament.",
+                    "nullable": true
+                  }
+                ]
+              },
+              "circuit_season": {
+                "allOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/CircuitSeason"
+                  },
+                  {
+                    "type": "object",
+                    "description": "The circuit season associated with this tournament.",
+                    "nullable": true
+                  }
+                ]
+              },
+              "circuit_region": {
+                "allOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/CircuitRegion"
+                  },
+                  {
+                    "type": "object",
+                    "description": "The circuit region associated with this tournament.",
+                    "nullable": true
+                  }
+                ]
+              },
+              "circuit_tier": {
+                "allOf": [
+                  {
+                    "$ref": "#\/components\/schemas\/CircuitTier"
+                  },
+                  {
+                    "type": "object",
+                    "description": "The circuit tier associated with this tournament.",
+                    "nullable": true
+                  }
+                ]
+              },
+              "logo": {
+                "allOf": [
+                  {
+                    "description": "The tournament logo in every available format."
+                  },
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentLogo"
+                  }
+                ]
+              },
+              "background": {
+                "allOf": [
+                  {
+                    "description": "The tournament background in every available format (Pro plan)."
+                  },
+                  {
+                    "nullable": true
+                  },
+                  {
+                    "$ref": "#\/components\/schemas\/TournamentBackground"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      "TournamentDetailedTeam": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentDetailedSingle"
+          },
+          {
+            "type": "object",
+            "required": [
+              "team_min_size",
+              "team_max_size"
+            ],
+            "properties": {
+              "team_min_size": {
+                "description": "The smallest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 2
+              },
+              "team_max_size": {
+                "description": "The largest possible team size (only if the tournament participant type is \u201cteam\u201d).",
+                "type": "integer",
+                "example": 5
+              }
+            }
+          }
+        ]
+      },
+      "TournamentLogoBase": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "description": "The unique identifier of a file (with context \u0022tournament_logo\u0022), that can be used in other APIs.",
+            "type": "string",
+            "example": "7074908991469559808"
+          }
+        }
+      },
+      "TournamentBackgroundBase": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "description": "The unique identifier of a file (with context \u0022tournament_background\u0022), that can be used in other APIs.",
+            "type": "string",
+            "example": "7074898466316419073"
+          }
+        }
+      },
+      "TournamentLogo": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentLogoBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "logo_small",
+              "logo_medium",
+              "logo_large",
+              "original"
+            ],
+            "properties": {
+              "logo_small": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074908991469559808\/logo_small",
+                "description": "URL of the small version of the tournament logo."
+              },
+              "logo_medium": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074908991469559808\/logo_medium",
+                "description": "URL of the medium version of the tournament logo."
+              },
+              "logo_large": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074908991469559808\/logo_large",
+                "description": "URL of the large version of the tournament logo."
+              },
+              "original": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074908991469559808\/original",
+                "description": "URL of the original version of the tournament logo."
+              }
+            }
+          }
+        ]
+      },
+      "TournamentBackground": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/TournamentBackgroundBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "small_4x1",
+              "medium_4x1",
+              "full_4x1",
+              "original"
+            ],
+            "properties": {
+              "small_4x1": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074898466316419073\/small_4x1",
+                "description": "URL of the small version of the tournament background."
+              },
+              "medium_4x1": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074898466316419073\/medium_4x1",
+                "description": "URL of the medium version of the tournament background."
+              },
+              "full_4x1": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074898466316419073\/full_4x1",
+                "description": "URL of the full version of the tournament background."
+              },
+              "original": {
+                "type": "string",
+                "example": "https:\/\/api.toornament.com\/toornament\/media\/file\/7074898466316419073\/original",
+                "description": "URL of the original version of the tournament background."
+              }
+            }
+          }
+        ]
+      },
+      "Circuit": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "description": "The id of the circuit.",
+            "type": "string",
+            "example": "5756452414364442624"
+          },
+          "name": {
+            "description": "The name of the circuit.",
+            "maxLength": 40,
+            "type": "string",
+            "example": "Challenger League"
+          }
+        }
+      },
+      "CircuitSeason": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "id",
+          "name",
+          "machine_name"
+        ],
+        "properties": {
+          "id": {
+            "description": "The id of the circuit season.",
+            "type": "string",
+            "example": "5756460443435106304"
+          },
+          "name": {
+            "description": "The name of the circuit season.",
+            "maxLength": 40,
+            "type": "string",
+            "example": "Season 42"
+          },
+          "machine_name": {
+            "description": "A name used to identify a circuit season.",
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$",
+            "maxLength": 40,
+            "example": "season_42"
+          }
+        }
+      },
+      "CircuitRegion": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "id",
+          "name",
+          "machine_name"
+        ],
+        "properties": {
+          "id": {
+            "description": "The id of the circuit region.",
+            "type": "string",
+            "example": "5756460443435106304"
+          },
+          "name": {
+            "description": "The name of the circuit region.",
+            "maxLength": 40,
+            "type": "string",
+            "example": "Europe"
+          },
+          "machine_name": {
+            "description": "A name used to identify a circuit region.",
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$",
+            "maxLength": 40,
+            "example": "europe"
+          }
+        }
+      },
+      "CircuitTier": {
+        "type": "object",
+        "nullable": true,
+        "required": [
+          "id",
+          "name",
+          "machine_name"
+        ],
+        "properties": {
+          "id": {
+            "description": "The id of the circuit tier.",
+            "type": "string",
+            "example": "5756492752630054912"
+          },
+          "name": {
+            "description": "The name of the circuit tier.",
+            "maxLength": 40,
+            "type": "string",
+            "example": "Top"
+          },
+          "machine_name": {
+            "description": "A name used to identify a circuit tier.",
+            "type": "string",
+            "pattern": "^[a-z0-9_]+$",
+            "maxLength": 40,
+            "example": "top"
+          }
+        }
+      }
+    }
+  }
+}
