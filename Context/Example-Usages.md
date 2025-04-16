@@ -40,6 +40,99 @@ $updatedTournament = Toornament::tournament()->update('378426939508809728', [
 $deleted = Toornament::tournament()->delete('378426939508809728');
 ```
 
+## Stage API
+```php
+use ServNX\Toornament\Facades\Toornament;
+
+// Get all stages
+$stages = Toornament::stage()->all();
+
+// Get all stages with filters
+$filteredStages = Toornament::stage()->all(['tournament_ids' => '378426939508809728']);
+
+// Find a specific stage
+$stage = Toornament::stage()->find('618983668512789184');
+
+// Get stages for a tournament
+$tournamentStages = Toornament::stage()->byTournament('378426939508809728');
+
+// Create a new stage
+$newStage = Toornament::stage()->create([
+    'tournament_id' => '378426939508809728',
+    'number' => 1,
+    'name' => 'Group Stage',
+    'type' => 'pools',
+    'settings' => [
+        'size' => 4,
+        'groups_count' => 4
+    ],
+    'match_settings' => [
+        'format' => [
+            'type' => 'best_of',
+            'options' => [
+                'nb_match_sets' => 3
+            ]
+        ]
+    ],
+    'auto_placement_enabled' => false
+]);
+
+// Update a stage
+$updatedStage = Toornament::stage()->update('618983668512789184', [
+    'name' => 'Updated Stage Name',
+    'settings' => [
+        'size' => 8
+    ],
+    'match_settings' => [
+        'format' => [
+            'type' => 'best_of',
+            'options' => [
+                'nb_match_sets' => 5
+            ]
+        ]
+    ]
+]);
+
+// Delete a stage
+$deleted = Toornament::stage()->delete('618983668512789184');
+
+// Seed participants into a stage
+$seededStage = Toornament::stage()->seedParticipants(
+    '618983668512789184',
+    [
+        '375143143408309123',
+        '375143143408309124',
+        '375143143408309125',
+        '375143143408309126'
+    ],
+    'manual'
+);
+
+// Get the bracket structure for a stage
+$bracketStructure = Toornament::stage()->getBracket('618983668512789184');
+
+// Start a stage (change status from 'pending' to 'running')
+$runningStage = Toornament::stage()->start('618983668512789184');
+
+// Access stage properties
+$stageId = $stage->getId();
+$stageName = $stage->getName();
+$stageType = $stage->getType();
+$stageNumber = $stage->getNumber();
+$stageStatus = $stage->getStatus();
+$tournamentId = $stage->getTournamentId();
+$isClosed = $stage->isClosed();
+
+// Get stage settings
+$settings = $stage->getSettings();
+
+// Get match settings for a stage
+$matchSettings = $stage->getMatchSettings();
+
+// Check if auto placement is enabled
+$autoPlacementEnabled = $stage->isAutoPlacementEnabled();
+```
+
 ## Participant API
 ```php
 use ServNX\Toornament\Facades\Toornament;

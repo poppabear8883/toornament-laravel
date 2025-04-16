@@ -110,6 +110,24 @@ class StageService extends BaseToornamentService
     }
 
     /**
+     * Delete a stage.
+     *
+     * @param string $id
+     * @return bool
+     */
+    public function delete(string $id): bool
+    {
+        $this->client()->request(
+            'DELETE',
+            "{$this->endpoint}/{$id}",
+            [],
+            'organizer:admin'
+        );
+
+        return true;
+    }
+
+    /**
      * Seed participant slots for a stage.
      *
      * @param string $stageId
