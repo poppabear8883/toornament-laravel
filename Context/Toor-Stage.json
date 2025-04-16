@@ -70,6 +70,43 @@
             ]
           }
         ]
+      },
+      "post": {
+        "tags": [
+          "organizer_stages"
+        ],
+        "summary": "Create a new stage.",
+        "description": "Creates a new stage with the provided information and settings.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/StageCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stage created",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/StageFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
       }
     },
     "\/stages\/{id}": {
@@ -91,6 +128,114 @@
               "application\/json": {
                 "schema": {
                   "$ref": "#\/components\/schemas\/StageFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:result",
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_stages"
+        ],
+        "summary": "Update a stage.",
+        "description": "Updates a stage with the given id with the provided information and settings.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/stageId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/StageUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Stage updated",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/StageFully"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_stages"
+        ],
+        "summary": "Delete a stage.",
+        "description": "Deletes a stage with the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/stageId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Stage deleted"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:admin"
+            ]
+          }
+        ]
+      }
+    },
+    "\/stages\/{stage_id}\/ranking-items": {
+      "get": {
+        "tags": [
+          "organizer_stages"
+        ],
+        "summary": "Retrieve ranking items of a stage.",
+        "description": "Returns ranking items of a stage with a small summary of the associated participant in the ranking. The items are always ordered by ascending position.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/stageId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/itemsRange"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranking items retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/RankingItem"
+                  }
                 }
               }
             }
@@ -182,6 +327,50 @@
           }
         ]
       }
+    },
+    "\/tournaments\/{tournament_id}\/stages\/{stage_id}\/ranking-items": {
+      "get": {
+        "deprecated": true,
+        "tags": [
+          "organizer_stages"
+        ],
+        "summary": "Retrieve ranking items of a stage and tournament.",
+        "description": "Returns ranking items of a stage with a small summary of the associated participant in the ranking. The items are always ordered by ascending position.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/tournamentId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/stageId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/itemsRange"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ranking items retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/RankingItemLegacy"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": [
+              "organizer:result"
+            ]
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -223,6 +412,16 @@
           "example": "stages=0-49"
         },
         "description": "A range of requested items using the \u0027stages\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "itemsRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "items=0-49"
+        },
+        "description": "A range of requested items using the \u0027items\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
       },
       "tournamentId": {
         "name": "tournament_id",
@@ -456,6 +655,149 @@
             "$ref": "#\/components\/schemas\/StageBaseSettings"
           }
         ]
+      },
+      "RankingItem": {
+        "properties": {
+          "id": {
+            "description": "A unique identifier for the ranking item.",
+            "type": "string",
+            "example": "375143143408309123"
+          },
+          "tournament_id": {
+            "description": "The id of the tournament.",
+            "type": "string",
+            "example": "378426939508809728"
+          },
+          "stage_id": {
+            "description": "The id of the stage that contains this ranking item.",
+            "type": "string",
+            "example": "618983668512789184"
+          },
+          "group_id": {
+            "description": "The id of the group that contains this ranking item.",
+            "type": "string",
+            "example": "618983668512789184"
+          },
+          "position": {
+            "description": "A position used for presentation purposes. It is always unique within the same ranking.",
+            "type": "integer",
+            "example": 4
+          },
+          "rank": {
+            "description": "The ranking of the participant in the ranking.",
+            "type": "integer",
+            "example": 3
+          },
+          "participant": {
+            "description": "The participant associated with this ranking item.",
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The id of the participant.",
+                "type": "string",
+                "example": "375143143408309123"
+              },
+              "name": {
+                "description": "The name of the participant.",
+                "type": "string",
+                "example": "Jon Snow"
+              },
+              "custom_user_identifier": {
+                "description": "An external custom user identifier.",
+                "type": "string",
+                "example": "acme:account:1234"
+              },
+              "custom_fields": {
+                "description": "The values of the custom fields configured in the tournament.",
+                "type": "object",
+                "example": {}
+              }
+            }
+          },
+          "points": {
+            "description": "A number of points acquired by the participant in the ranking.",
+            "type": "integer",
+            "example": 15
+          },
+          "properties": {
+            "description": "A list of ranking metrics.",
+            "type": "object",
+            "example": {
+              "wins": 1,
+              "draws": 0,
+              "losses": 0,
+              "played": 1,
+              "forfeits": 0,
+              "score_for": 0,
+              "score_against": 0,
+              "score_difference": 0
+            }
+          }
+        }
+      },
+      "RankingItemLegacy": {
+        "properties": {
+          "id": {
+            "description": "A unique identifier for the ranking item.",
+            "type": "string",
+            "example": "375143143408309123"
+          },
+          "position": {
+            "description": "A position used for presentation purposes. It is always unique within the same ranking.",
+            "type": "integer",
+            "example": 4
+          },
+          "rank": {
+            "description": "The ranking of the participant in the ranking.",
+            "type": "integer",
+            "example": 3
+          },
+          "participant": {
+            "description": "The participant associated with this ranking item.",
+            "type": "object",
+            "properties": {
+              "id": {
+                "description": "The id of the participant.",
+                "type": "string",
+                "example": "375143143408309123"
+              },
+              "name": {
+                "description": "The name of the participant.",
+                "type": "string",
+                "example": "Jon Snow"
+              },
+              "custom_user_identifier": {
+                "description": "An external custom user identifier.",
+                "type": "string",
+                "example": "acme:account:1234"
+              },
+              "custom_fields": {
+                "description": "The values of the custom fields configured in the tournament.",
+                "type": "object",
+                "example": {}
+              }
+            }
+          },
+          "points": {
+            "description": "A number of points acquired by the participant in the ranking.",
+            "type": "integer",
+            "example": 15
+          },
+          "properties": {
+            "description": "A list of ranking metrics.",
+            "type": "object",
+            "example": {
+              "wins": 1,
+              "draws": 0,
+              "losses": 0,
+              "played": 1,
+              "forfeits": 0,
+              "score_for": 0,
+              "score_against": 0,
+              "score_difference": 0
+            }
+          }
+        }
       }
     }
   }
