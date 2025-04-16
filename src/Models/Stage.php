@@ -2,7 +2,7 @@
 
 namespace ServNX\Toornament\Models;
 
-class Stage
+class Stage implements \JsonSerializable
 {
     /**
      * The stage attributes.
@@ -140,5 +140,10 @@ class Stage
     public function __get(string $key)
     {
         return $this->attributes[$key] ?? null;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return $this->attributes;
     }
 }
