@@ -62,6 +62,7 @@ class ToornamentServiceProvider extends ServiceProvider
             'match_report' => \ServNX\Toornament\Services\MatchReportService::class,
             'match_game' => \ServNX\Toornament\Services\MatchGameService::class,
             'ranking' => \ServNX\Toornament\Services\RankingService::class,
+            'webhook' => \ServNX\Toornament\Services\WebhookService::class,
         ];
 
         foreach ($services as $key => $class) {
