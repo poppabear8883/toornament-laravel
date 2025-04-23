@@ -1,0 +1,344 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "webhook"
+    },
+    {
+      "name": "organizer_webhooks"
+    },
+    {
+      "name": "webhook_api"
+    }
+  ],
+  "info": {
+    "title": "Webhooks",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.0.2",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/webhooks": {
+      "get": {
+        "tags": [
+          "organizer_webhooks"
+        ],
+        "summary": "Retrieve webhooks linked to your application.",
+        "description": "Returns the webhooks linked to your application.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookRange"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Webhooks retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Webhook"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_webhooks"
+        ],
+        "summary": "Create a new webhook linked to your application.",
+        "description": "Create a new webhook linked to your application.",
+        "requestBody": {
+          "description": "Webhook data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/WebhookCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Webhook created.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "callbacks": {
+          "onData": {
+            "{$request.body#\/url}": {
+              "head": {
+                "parameters": [
+                  {
+                    "$ref": "#\/components\/parameters\/webhookSecret"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "The webhook is enabled."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      }
+    },
+    "\/webhooks\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_webhooks"
+        ],
+        "summary": "Retrieve a single webhook linked to your application.",
+        "description": "Returns a single webhook linked to your application.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Webhook retrieved.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_webhooks"
+        ],
+        "summary": "Update a webhook linked to your application.",
+        "description": "Updates a single webhook linked to your application.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          }
+        ],
+        "requestBody": {
+          "description": "Webhook data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/WebhookBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success.",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Webhook"
+                }
+              }
+            }
+          }
+        },
+        "callbacks": {
+          "onData": {
+            "{$request.body#\/url}": {
+              "head": {
+                "parameters": [
+                  {
+                    "$ref": "#\/components\/parameters\/webhookSecret"
+                  }
+                ],
+                "responses": {
+                  "200": {
+                    "description": "The webhook is enabled."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_webhooks"
+        ],
+        "summary": "Delete a webhook linked to your application.",
+        "description": "Deletes a single webhook linked to your application.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success."
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with no scopes (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization])",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token"
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "webhookRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "webhooks=0-49"
+        },
+        "description": "A range of requested items using the \u0027webhooks\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "webhookId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the webhook."
+      },
+      "webhookSecret": {
+        "name": "X-Webhook-Secret",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "A unique key for payload validation."
+      }
+    },
+    "schemas": {
+      "WebhookBase": {
+        "properties": {
+          "enabled": {
+            "description": "Whether the webhook is enabled.",
+            "type": "boolean",
+            "example": false
+          },
+          "name": {
+            "description": "The name of the webhook.",
+            "type": "string",
+            "maxLength": 40,
+            "example": "My tournament webhook"
+          },
+          "url": {
+            "description": "The URL the webhook must call.",
+            "type": "string",
+            "maxLength": 255,
+            "example": "http:\/\/mytournamentsite.com\/mywebhook"
+          }
+        }
+      },
+      "Webhook": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/WebhookCreate"
+          },
+          {
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "description": "The id of the webhook.",
+                "type": "string",
+                "example": "880097283784269395"
+              }
+            }
+          }
+        ]
+      },
+      "WebhookCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/WebhookBase"
+          },
+          {
+            "required": [
+              "enabled",
+              "name",
+              "url"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

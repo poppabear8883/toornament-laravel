@@ -1,0 +1,369 @@
+{
+  "openapi": "3.0.0",
+  "tags": [
+    {
+      "name": "organizer"
+    },
+    {
+      "name": "webhook_subscription"
+    },
+    {
+      "name": "organizer_webhook_subscriptions"
+    },
+    {
+      "name": "webhook_api"
+    }
+  ],
+  "info": {
+    "title": "Webhook subscriptions",
+    "termsOfService": "https:\/\/developer.toornament.com\/terms-guidelines",
+    "version": "2.0.3",
+    "description": "The Toornament platform connects your website and application with the eSports tournaments around the world.",
+    "contact": {
+      "name": "Toornament Developer",
+      "url": "https:\/\/developer.toornament.com",
+      "email": "contact@toornament.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https:\/\/api.toornament.com\/organizer\/v2"
+    }
+  ],
+  "paths": {
+    "\/webhooks\/{webhook_id}\/subscriptions": {
+      "get": {
+        "tags": [
+          "organizer_webhook_subscriptions"
+        ],
+        "summary": "Retrieve the subscriptions to a webhook.",
+        "description": "Returns the subscriptions to a webhook.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/subscriptionRange"
+          },
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          }
+        ],
+        "responses": {
+          "206": {
+            "description": "Webhooks retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#\/components\/schemas\/Subscription"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "organizer_webhook_subscriptions"
+        ],
+        "summary": "Create a new subscription to a webhook.",
+        "description": "Creates a new subscription to a webhook.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          }
+        ],
+        "requestBody": {
+          "description": "Subscription data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/SubscriptionCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Subscription created",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      }
+    },
+    "\/webhooks\/{webhook_id}\/subscriptions\/{id}": {
+      "get": {
+        "tags": [
+          "organizer_webhook_subscriptions"
+        ],
+        "summary": "Retrieve a single subscription of a webhook.",
+        "description": "Returns a subscription identified with the given id.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/subscriptionId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription retrieved",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "organizer_webhook_subscriptions"
+        ],
+        "summary": "Update a subscription to a webhook.",
+        "description": "Updates a single subscription to a webhook.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/subscriptionId"
+          }
+        ],
+        "requestBody": {
+          "description": "Subscription data",
+          "content": {
+            "application\/json": {
+              "schema": {
+                "$ref": "#\/components\/schemas\/SubscriptionBase"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application\/json": {
+                "schema": {
+                  "$ref": "#\/components\/schemas\/Subscription"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "organizer_webhook_subscriptions"
+        ],
+        "summary": "Delete a subscription to a webhook.",
+        "description": "Deletes a single subscription to a webhook.",
+        "parameters": [
+          {
+            "$ref": "#\/components\/parameters\/webhookId"
+          },
+          {
+            "$ref": "#\/components\/parameters\/subscriptionId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "apiKey": [],
+            "oAuth2": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "apiKey": {
+        "type": "apiKey",
+        "name": "X-Api-Key",
+        "in": "header"
+      },
+      "oAuth2": {
+        "type": "oauth2",
+        "description": "Access token with no scopes (see (Authorization)[https:\/\/developer.toornament.com\/v2\/security\/authorization]).",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token"
+          },
+          "authorizationCode": {
+            "authorizationUrl": "https:\/\/account.toornament.com\/oauth2\/authorize",
+            "tokenUrl": "https:\/\/api.toornament.com\/oauth\/v2\/token"
+          }
+        }
+      }
+    },
+    "parameters": {
+      "subscriptionRange": {
+        "name": "Range",
+        "in": "header",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "subscriptions=0-49"
+        },
+        "description": "A range of requested items using the \u0027subscriptions\u0027 unit. The size of the range can not exceed 50. (see [Pagination](https:\/\/developer.toornament.com\/v2\/overview\/pagination))"
+      },
+      "webhookId": {
+        "name": "webhook_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the subscription\u0027s webhook.",
+        "example": "378426939508809728"
+      },
+      "subscriptionId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "description": "The id of the subscription."
+      }
+    },
+    "schemas": {
+      "SubscriptionBase": {
+        "properties": {
+          "event_name": {
+            "description": "The type of event you want to subscribe to.",
+            "type": "string",
+            "enum": [
+              "registration.created",
+              "registration.info_updated",
+              "registration.accepted",
+              "registration.refused",
+              "registration.reset",
+              "registration.cancelled",
+              "registration.deleted",
+              "participant.checked_in",
+              "participant.unchecked_in",
+              "participant.created",
+              "participant.deleted",
+              "participant.info_updated",
+              "registration.payment_pending",
+              "registration.payment_skipped",
+              "registration.payment_completed",
+              "registration.payment_refund",
+              "registration.payment_failed",
+              "tournament.created",
+              "tournament.info_updated",
+              "tournament.registration_opened",
+              "tournament.registration_closed",
+              "tournament.check_in_opened",
+              "tournament.check_in_closed",
+              "tournament.custom_fields_updated",
+              "tournament.sponsors_updated",
+              "tournament.standing_updated",
+              "tournament.deleted",
+              "stage.created",
+              "stage.info_updated",
+              "stage.structure_updated",
+              "stage.status_updated",
+              "stage.deleted",
+              "team.created",
+              "team.lineup_changed",
+              "team.disbanded"
+            ],
+            "example": "registration.created"
+          },
+          "scope": {
+            "description": "The scope the event you are subscribing to is a part of.",
+            "type": "string",
+            "enum": [
+              "tournament",
+              "project",
+              "platform"
+            ],
+            "example": "tournament"
+          },
+          "scope_id": {
+            "description": "The unique identifier of the entity linked to the scope.",
+            "type": "string",
+            "example": "842693950880972837"
+          }
+        }
+      },
+      "Subscription": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/SubscriptionBase"
+          },
+          {
+            "required": [
+              "id",
+              "event_name",
+              "scope",
+              "scope_id"
+            ],
+            "properties": {
+              "id": {
+                "description": "The unique identifier of the subscription.",
+                "type": "string",
+                "example": "378426939508809728"
+              }
+            }
+          }
+        ]
+      },
+      "SubscriptionCreate": {
+        "allOf": [
+          {
+            "$ref": "#\/components\/schemas\/SubscriptionBase"
+          },
+          {
+            "required": [
+              "event_name",
+              "scope",
+              "scope_id"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

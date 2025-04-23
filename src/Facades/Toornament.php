@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static \ServNX\Toornament\Services\RoundService round()
  * @method static \ServNX\Toornament\Services\RankingService ranking()
  * @method static \ServNX\Toornament\Services\CustomFieldService customField()
+ * @method static \ServNX\Toornament\Services\WebhookService webhook()
  *
  * @method static \ServNX\Toornament\Http\ToornamentClient getClient()
  *
