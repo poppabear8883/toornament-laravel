@@ -163,7 +163,7 @@ class WebhookService extends BaseToornamentService
      * @param string $scopeId
      * @return \ServNX\Toornament\Models\Subscription
      */
-    public function createSubscription(string $webhookId, string $eventName, string $scope, string $scopeId): Subscription
+    public function createSubscription(string $webhookId, string $eventName, string $scope, string|null $scopeId): Subscription
     {
         $data = [
             'event_name' => $eventName,
