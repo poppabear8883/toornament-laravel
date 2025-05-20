@@ -2,6 +2,7 @@
 
 namespace ServNX\Toornament;
 
+use Illuminate\Support\Str;
 use ServNX\Toornament\Http\ToornamentClient;
 
 class Toornament
@@ -32,6 +33,9 @@ class Toornament
      */
     public function __call(string $method, array $arguments)
     {
+        // snake_case the method name
+        $method = Str::snake($method);
+
         if (app()->bound("toornament.{$method}")) {
             return app("toornament.{$method}");
         }
