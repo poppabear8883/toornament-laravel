@@ -14,13 +14,13 @@ TOORNAMENT_REDIRECT_URI=your-redirect-uri
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all tournaments
-$tournaments = Toornament::tournament()->all();
+$tournaments = Toornament::tournaments()->all();
 
 // Find a specific tournament
-$tournament = Toornament::tournament()->find('378426939508809728');
+$tournament = Toornament::tournaments()->find('378426939508809728');
 
 // Create a new tournament
-$newTournament = Toornament::tournament()->create([
+$newTournament = Toornament::tournaments()->create([
     'discipline' => 'counterstrike_go',
     'name' => 'My Laravel Tournament',
     'participant_type' => 'team',
@@ -30,14 +30,14 @@ $newTournament = Toornament::tournament()->create([
 ]);
 
 // Update a tournament
-$updatedTournament = Toornament::tournament()->update('378426939508809728', [
+$updatedTournament = Toornament::tournaments()->update('378426939508809728', [
     'name' => 'Updated Tournament Name',
     'public' => true,
     'size' => 32
 ]);
 
 // Delete a tournament
-$deleted = Toornament::tournament()->delete('378426939508809728');
+$deleted = Toornament::tournaments()->delete('378426939508809728');
 ```
 
 ## Stage API
@@ -45,19 +45,19 @@ $deleted = Toornament::tournament()->delete('378426939508809728');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all stages
-$stages = Toornament::stage()->all();
+$stages = Toornament::stages()->all();
 
 // Get all stages with filters
-$filteredStages = Toornament::stage()->all(['tournament_ids' => '378426939508809728']);
+$filteredStages = Toornament::stages()->all(['tournament_ids' => '378426939508809728']);
 
 // Find a specific stage
-$stage = Toornament::stage()->find('618983668512789184');
+$stage = Toornament::stages()->find('618983668512789184');
 
 // Get stages for a tournament
-$tournamentStages = Toornament::stage()->byTournament('378426939508809728');
+$tournamentStages = Toornament::stages()->byTournament('378426939508809728');
 
 // Create a new stage
-$newStage = Toornament::stage()->create([
+$newStage = Toornament::stages()->create([
     'tournament_id' => '378426939508809728',
     'number' => 1,
     'name' => 'Group Stage',
@@ -78,7 +78,7 @@ $newStage = Toornament::stage()->create([
 ]);
 
 // Update a stage
-$updatedStage = Toornament::stage()->update('618983668512789184', [
+$updatedStage = Toornament::stages()->update('618983668512789184', [
     'name' => 'Updated Stage Name',
     'settings' => [
         'size' => 8
@@ -94,10 +94,10 @@ $updatedStage = Toornament::stage()->update('618983668512789184', [
 ]);
 
 // Delete a stage
-$deleted = Toornament::stage()->delete('618983668512789184');
+$deleted = Toornament::stages()->delete('618983668512789184');
 
 // Seed participants into a stage
-$seededStage = Toornament::stage()->seedParticipants(
+$seededStage = Toornament::stages()->seedParticipants(
     '618983668512789184',
     [
         '375143143408309123',
@@ -109,10 +109,10 @@ $seededStage = Toornament::stage()->seedParticipants(
 );
 
 // Get the bracket structure for a stage
-$bracketStructure = Toornament::stage()->getBracket('618983668512789184');
+$bracketStructure = Toornament::stages()->getBracket('618983668512789184');
 
 // Start a stage (change status from 'pending' to 'running')
-$runningStage = Toornament::stage()->start('618983668512789184');
+$runningStage = Toornament::stages()->start('618983668512789184');
 
 // Access stage properties
 $stageId = $stage->getId();
@@ -133,21 +133,74 @@ $matchSettings = $stage->getMatchSettings();
 $autoPlacementEnabled = $stage->isAutoPlacementEnabled();
 ```
 
+## Placement API
+```php
+use ServNX\Toornament\Facades\Toornament;
+
+// Get all placement slots for a stage
+$placementSlots = Toornament::placements()->all('618983668512789184');
+
+// Update placement slots for a stage
+$updatedSlots = Toornament::placements()->update(
+    '618983668512789184',
+    [
+        [
+            'number' => 1,
+            'participant_id' => '375143143408309123'
+        ],
+        [
+            'number' => 2,
+            'participant_id' => '375143143408309124'
+        ],
+        [
+            'number' => 3,
+            'participant_id' => '375143143408309125'
+        ],
+        [
+            'number' => 4,
+            'participant_id' => '375143143408309126'
+        ]
+    ]
+);
+
+// Update a single placement slot
+$updatedSlot = Toornament::placements()->updateSlot(
+    '618983668512789184',
+    1,
+    '375143143408309123'
+);
+
+// Remove a participant from a placement slot
+$clearedSlot = Toornament::placements()->updateSlot(
+    '618983668512789184',
+    1,
+    null
+);
+
+// Reset all placement slots for a stage
+$reset = Toornament::placements()->reset('618983668512789184');
+
+// Access placement properties
+$slotNumber = $placementSlot->getNumber();
+$participantId = $placementSlot->getParticipantId();
+$hasParticipant = $placementSlot->hasParticipant();
+```
+
 ## Participant API
 ```php
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all participants
-$participants = Toornament::participant()->all();
+$participants = Toornament::participants()->all();
 
 // Get participants for a tournament
-$tournamentParticipants = Toornament::participant()->byTournament('378426939508809728');
+$tournamentParticipants = Toornament::participants()->byTournament('378426939508809728');
 
 // Find a specific participant
-$participant = Toornament::participant()->find('375143143408309123');
+$participant = Toornament::participants()->find('375143143408309123');
 
 // Create a player participant
-$playerParticipant = Toornament::participant()->create([
+$playerParticipant = Toornament::participants()->create([
     'tournament_id' => '378426939508809728',
     'name' => 'John Doe',
     'email' => 'john.doe@example.com',
@@ -156,7 +209,7 @@ $playerParticipant = Toornament::participant()->create([
 ]);
 
 // Create a team participant
-$teamParticipant = Toornament::participant()->create([
+$teamParticipant = Toornament::participants()->create([
     'tournament_id' => '378426939508809728',
     'name' => 'Team Laravel',
     'email' => 'team@example.com',
@@ -176,13 +229,13 @@ $teamParticipant = Toornament::participant()->create([
 ]);
 
 // Update a participant
-$updatedParticipant = Toornament::participant()->update('375143143408309123', [
+$updatedParticipant = Toornament::participants()->update('375143143408309123', [
     'name' => 'Updated Name',
     'checked_in' => true
 ]);
 
 // Delete a participant
-$deleted = Toornament::participant()->delete('375143143408309123');
+$deleted = Toornament::participants()->delete('375143143408309123');
 ```
 
 ## Match API
@@ -190,53 +243,53 @@ $deleted = Toornament::participant()->delete('375143143408309123');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all matches
-$matches = Toornament::match()->all();
+$matches = Toornament::matches()->all();
 
 // Find a specific match
-$match = Toornament::match()->find('618954615761465416');
+$match = Toornament::matches()->find('618954615761465416');
 
 // Get matches for a tournament
-$tournamentMatches = Toornament::match()->byTournament('378426939508809728');
+$tournamentMatches = Toornament::matches()->byTournament('378426939508809728');
 
 // Get matches for a stage
-$stageMatches = Toornament::match()->byStage('618983668512789184');
+$stageMatches = Toornament::matches()->byStage('618983668512789184');
 
 // Get matches for a group
-$groupMatches = Toornament::match()->byGroup('618983668512789184');
+$groupMatches = Toornament::matches()->byGroup('618983668512789184');
 
 // Get matches for a round
-$roundMatches = Toornament::match()->byRound('618965146546456651');
+$roundMatches = Toornament::matches()->byRound('618965146546456651');
 
 // Get matches for a participant
-$participantMatches = Toornament::match()->byParticipant('375143143408309123');
+$participantMatches = Toornament::matches()->byParticipant('375143143408309123');
 
 // Get matches by status
-$pendingMatches = Toornament::match()->byStatus('pending');
-$runningMatches = Toornament::match()->byStatus('running');
-$completedMatches = Toornament::match()->byStatus('completed');
+$pendingMatches = Toornament::matches()->byStatus('pending');
+$runningMatches = Toornament::matches()->byStatus('running');
+$completedMatches = Toornament::matches()->byStatus('completed');
 
 // Get scheduled matches
-$scheduledMatches = Toornament::match()->scheduled();
+$scheduledMatches = Toornament::matches()->scheduled();
 
 // Get matches scheduled before/after a date
-$matchesBefore = Toornament::match()->scheduledBefore('2023-12-31T00:00:00+00:00');
-$matchesAfter = Toornament::match()->scheduledAfter('2023-01-01T00:00:00+00:00');
+$matchesBefore = Toornament::matches()->scheduledBefore('2023-12-31T00:00:00+00:00');
+$matchesAfter = Toornament::matches()->scheduledAfter('2023-01-01T00:00:00+00:00');
 
 // Get matches played before/after a date
-$playedBefore = Toornament::match()->playedBefore('2023-12-31T00:00:00+00:00');
-$playedAfter = Toornament::match()->playedAfter('2023-01-01T00:00:00+00:00');
+$playedBefore = Toornament::matches()->playedBefore('2023-12-31T00:00:00+00:00');
+$playedAfter = Toornament::matches()->playedAfter('2023-01-01T00:00:00+00:00');
 
 // Get upcoming matches
-$upcomingMatches = Toornament::match()->upcoming();
+$upcomingMatches = Toornament::matches()->upcoming();
 
 // Get ongoing matches
-$ongoingMatches = Toornament::match()->ongoing();
+$ongoingMatches = Toornament::matches()->ongoing();
 
 // Get completed matches
-$completedMatches = Toornament::match()->completed();
+$completedMatches = Toornament::matches()->completed();
 
 // Update a match result
-$updatedMatch = Toornament::match()->updateResult('618954615761465416', [
+$updatedMatch = Toornament::matches()->updateResult('618954615761465416', [
     [
         'number' => 1,
         'score' => 3,
@@ -250,13 +303,13 @@ $updatedMatch = Toornament::match()->updateResult('618954615761465416', [
 ]);
 
 // Schedule a match
-$scheduledMatch = Toornament::match()->schedule(
+$scheduledMatch = Toornament::matches()->schedule(
     '618954615761465416', 
     '2025-05-01T15:30:00+00:00'
 );
 
 // Add notes to a match
-$annotatedMatch = Toornament::match()->addNotes(
+$annotatedMatch = Toornament::matches()->addNotes(
     '618954615761465416',
     'This match was rescheduled due to technical issues.',
     'Team 1 requested the reschedule on April 10.'
@@ -268,31 +321,31 @@ $annotatedMatch = Toornament::match()->addNotes(
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all registrations
-$registrations = Toornament::registration()->all();
+$registrations = Toornament::registrations()->all();
 
 // Find a specific registration
-$registration = Toornament::registration()->find('12345678');
+$registration = Toornament::registrations()->find('12345678');
 
 // Get registrations for a tournament
-$tournamentRegistrations = Toornament::registration()->byTournament('378426939508809728');
+$tournamentRegistrations = Toornament::registrations()->byTournament('378426939508809728');
 
 // Get registrations by status
-$pendingRegistrations = Toornament::registration()->pending();
-$acceptedRegistrations = Toornament::registration()->accepted();
-$refusedRegistrations = Toornament::registration()->refused();
-$cancelledRegistrations = Toornament::registration()->cancelled();
+$pendingRegistrations = Toornament::registrations()->pending();
+$acceptedRegistrations = Toornament::registrations()->accepted();
+$refusedRegistrations = Toornament::registrations()->refused();
+$cancelledRegistrations = Toornament::registrations()->cancelled();
 
 // Get registrations by user
-$userRegistrations = Toornament::registration()->byUser('145246939508809147');
+$userRegistrations = Toornament::registrations()->byUser('145246939508809147');
 
 // Get registrations by team
-$teamRegistrations = Toornament::registration()->byTeam('561714159547269773');
+$teamRegistrations = Toornament::registrations()->byTeam('561714159547269773');
 
 // Get registrations by custom identifier
-$customRegistrations = Toornament::registration()->byCustomUserIdentifier('acme:account:1234');
+$customRegistrations = Toornament::registrations()->byCustomUserIdentifier('acme:account:1234');
 
 // Create a player registration
-$playerRegistration = Toornament::registration()->createPlayerRegistration([
+$playerRegistration = Toornament::registrations()->createPlayerRegistration([
     'tournament_id' => '378426939508809728',
     'name' => 'John Doe',
     'email' => 'john.doe@example.com',
@@ -304,7 +357,7 @@ $playerRegistration = Toornament::registration()->createPlayerRegistration([
 ]);
 
 // Create a team registration
-$teamRegistration = Toornament::registration()->createTeamRegistration([
+$teamRegistration = Toornament::registrations()->createTeamRegistration([
     'tournament_id' => '378426939508809728',
     'name' => 'Team Laravel',
     'email' => 'team@example.com',
@@ -326,21 +379,21 @@ $teamRegistration = Toornament::registration()->createTeamRegistration([
 ]);
 
 // Update a registration
-$updatedRegistration = Toornament::registration()->update('12345678', [
+$updatedRegistration = Toornament::registrations()->update('12345678', [
     'status' => 'accepted'
 ]);
 
 // Accept a registration
-$acceptedRegistration = Toornament::registration()->accept('12345678');
+$acceptedRegistration = Toornament::registrations()->accept('12345678');
 
 // Refuse a registration
-$refusedRegistration = Toornament::registration()->refuse('12345678');
+$refusedRegistration = Toornament::registrations()->refuse('12345678');
 
 // Cancel a registration
-$cancelledRegistration = Toornament::registration()->cancel('12345678');
+$cancelledRegistration = Toornament::registrations()->cancel('12345678');
 
 // Delete a registration
-$deleted = Toornament::registration()->delete('12345678');
+$deleted = Toornament::registrations()->delete('12345678');
 ```
 
 ## Discipline API
@@ -348,19 +401,19 @@ $deleted = Toornament::registration()->delete('12345678');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all disciplines
-$disciplines = Toornament::discipline()->all();
+$disciplines = Toornament::disciplines()->all();
 
 // Find a specific discipline by ID
-$discipline = Toornament::discipline()->find('counterstrike_go');
+$discipline = Toornament::disciplines()->find('counterstrike_go');
 
 // Find a discipline by shortname
-$discipline = Toornament::discipline()->findByShortname('CS:GO');
+$discipline = Toornament::disciplines()->findByShortname('CS:GO');
 
 // Find a discipline by name
-$discipline = Toornament::discipline()->findByName('Counter-Strike: GO');
+$discipline = Toornament::disciplines()->findByName('Counter-Strike: GO');
 
 // Find disciplines available on a specific platform
-$pcDisciplines = Toornament::discipline()->findByPlatform('pc');
+$pcDisciplines = Toornament::disciplines()->findByPlatform('pc');
 
 // Access discipline properties
 $name = $discipline->getName();
@@ -385,16 +438,16 @@ if ($discipline->hasFeature('map')) {
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all player custom fields
-$playerFields = Toornament::customField()->playerFields();
+$playerFields = Toornament::custom_fields()->playerFields();
 
 // Get all team custom fields for a tournament
-$teamFields = Toornament::customField()->byTournament('378426939508809728', 'team');
+$teamFields = Toornament::custom_fields()->byTournament('378426939508809728', 'team');
 
 // Find a specific custom field
-$customField = Toornament::customField()->find('128114939547269789');
+$customField = Toornament::custom_fields()->find('128114939547269789');
 
 // Create a new player custom field
-$discordField = Toornament::customField()->createPlayerField(
+$discordField = Toornament::custom_fields()->createPlayerField(
     '378426939508809728',
     'discord_id',
     'Discord ID',
@@ -407,7 +460,7 @@ $discordField = Toornament::customField()->createPlayerField(
 );
 
 // Create a new team custom field
-$logoField = Toornament::customField()->createTeamField(
+$logoField = Toornament::custom_fields()->createTeamField(
     '378426939508809728',
     'team_logo',
     'Team Logo URL',
@@ -420,7 +473,7 @@ $logoField = Toornament::customField()->createTeamField(
 );
 
 // Create a new team player custom field
-$roleField = Toornament::customField()->createTeamPlayerField(
+$roleField = Toornament::custom_fields()->createTeamPlayerField(
     '378426939508809728',
     'player_role',
     'Player Role',
@@ -433,25 +486,25 @@ $roleField = Toornament::customField()->createTeamPlayerField(
 );
 
 // Update a custom field
-$updatedField = Toornament::customField()->update('128114939547269789', [
+$updatedField = Toornament::custom_fields()->update('128114939547269789', [
     'label' => 'Updated Label',
     'required' => true
 ]);
 
 // Set a field as required
-$requiredField = Toornament::customField()->setRequired('128114939547269789', true);
+$requiredField = Toornament::custom_fields()->setRequired('128114939547269789', true);
 
 // Set a field as public
-$publicField = Toornament::customField()->setVisibility('128114939547269789', true);
+$publicField = Toornament::custom_fields()->setVisibility('128114939547269789', true);
 
 // Set a field position
-$repositionedField = Toornament::customField()->setPosition('128114939547269789', 3);
+$repositionedField = Toornament::custom_fields()->setPosition('128114939547269789', 3);
 
 // Set a field default value
-$defaultValueField = Toornament::customField()->setDefaultValue('128114939547269789', 'Default Value');
+$defaultValueField = Toornament::custom_fields()->setDefaultValue('128114939547269789', 'Default Value');
 
 // Delete a custom field
-$deleted = Toornament::customField()->delete('128114939547269789');
+$deleted = Toornament::custom_fields()->delete('128114939547269789');
 ```
 
 ## Bracket API
@@ -459,43 +512,43 @@ $deleted = Toornament::customField()->delete('128114939547269789');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all bracket nodes for a tournament
-$bracketNodes = Toornament::bracket()->byTournament('378426939508809728');
+$bracketNodes = Toornament::brackets()->byTournament('378426939508809728');
 
 // Get bracket nodes for a specific stage
-$stageNodes = Toornament::bracket()->byStage('618983668512789184');
+$stageNodes = Toornament::brackets()->byStage('618983668512789184');
 
 // Get nodes at a specific depth
-$depthNodes = Toornament::bracket()->byDepth(2);
+$depthNodes = Toornament::brackets()->byDepth(2);
 
 // Get nodes in a depth range
-$depthRangeNodes = Toornament::bracket()->byDepthRange(1, 3);
+$depthRangeNodes = Toornament::brackets()->byDepthRange(1, 3);
 
 // Get nodes in the winners bracket
-$winnersNodes = Toornament::bracket()->inWinnersBracket([
+$winnersNodes = Toornament::brackets()->inWinnersBracket([
     'tournament_ids' => '378426939508809728',
     'stage_ids' => '618983668512789184'
 ]);
 
 // Get nodes in the losers bracket
-$losersNodes = Toornament::bracket()->inLosersBracket([
+$losersNodes = Toornament::brackets()->inLosersBracket([
     'tournament_ids' => '378426939508809728',
     'stage_ids' => '618983668512789184'
 ]);
 
 // Get nodes in the grand final
-$grandFinalNodes = Toornament::bracket()->inGrandFinal([
+$grandFinalNodes = Toornament::brackets()->inGrandFinal([
     'tournament_ids' => '378426939508809728',
     'stage_ids' => '618983668512789184'
 ]);
 
 // Get the final node of a bracket
-$finalNode = Toornament::bracket()->getFinal('378426939508809728', '618983668512789184');
+$finalNode = Toornament::brackets()->getFinal('378426939508809728', '618983668512789184');
 
 // Get source nodes for a node
-$sourceNodes = Toornament::bracket()->getSourceNodes($node);
+$sourceNodes = Toornament::brackets()->getSourceNodes($node);
 
 // Build a complete bracket structure
-$bracketStructure = Toornament::bracket()->buildBracketStructure(
+$bracketStructure = Toornament::brackets()->buildBracketStructure(
     '378426939508809728', 
     '618983668512789184'
 );
@@ -527,43 +580,43 @@ $isPending = $node->isPending();
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all groups
-$groups = Toornament::group()->all();
+$groups = Toornament::groups()->all();
 
 // Find a specific group
-$group = Toornament::group()->find('618983668512789184');
+$group = Toornament::groups()->find('618983668512789184');
 
 // Get groups for a tournament
-$tournamentGroups = Toornament::group()->byTournament('378426939508809728');
+$tournamentGroups = Toornament::groups()->byTournament('378426939508809728');
 
 // Get groups for a specific stage
-$stageGroups = Toornament::group()->byStage('618945443132178479');
+$stageGroups = Toornament::groups()->byStage('618945443132178479');
 
 // Get groups by stage number
-$stageNumberGroups = Toornament::group()->byStageNumber(1);
+$stageNumberGroups = Toornament::groups()->byStageNumber(1);
 
 // Get groups for a specific tournament and stage
-$filteredGroups = Toornament::group()->byTournamentAndStage(
+$filteredGroups = Toornament::groups()->byTournamentAndStage(
     '378426939508809728',
     '618945443132178479'
 );
 
 // Get groups by number
-$groupsNumber2 = Toornament::group()->byNumber(2);
+$groupsNumber2 = Toornament::groups()->byNumber(2);
 
 // Get open groups
-$openGroups = Toornament::group()->open();
+$openGroups = Toornament::groups()->open();
 
 // Get closed groups
-$closedGroups = Toornament::group()->closed();
+$closedGroups = Toornament::groups()->closed();
 
 // Get group settings
-$settings = Toornament::group()->getSettings($group);
+$settings = Toornament::groups()->getSettings($group);
 
 // Get group match settings
-$matchSettings = Toornament::group()->getMatchSettings($group);
+$matchSettings = Toornament::groups()->getMatchSettings($group);
 
 // Get match format
-$matchFormat = Toornament::group()->getMatchFormat($group);
+$matchFormat = Toornament::groups()->getMatchFormat($group);
 
 // Access group properties
 $groupId = $group->getId();
@@ -582,50 +635,50 @@ $specificMatchSetting = $group->getMatchSetting('some_key');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all rounds
-$rounds = Toornament::round()->all();
+$rounds = Toornament::rounds()->all();
 
 // Find a specific round
-$round = Toornament::round()->find('618965146546456651');
+$round = Toornament::rounds()->find('618965146546456651');
 
 // Get rounds for a tournament
-$tournamentRounds = Toornament::round()->byTournament('378426939508809728');
+$tournamentRounds = Toornament::rounds()->byTournament('378426939508809728');
 
 // Get rounds for a specific stage
-$stageRounds = Toornament::round()->byStage('618945443132178479');
+$stageRounds = Toornament::rounds()->byStage('618945443132178479');
 
 // Get rounds by stage number
-$stageNumberRounds = Toornament::round()->byStageNumber(1);
+$stageNumberRounds = Toornament::rounds()->byStageNumber(1);
 
 // Get rounds for a specific group
-$groupRounds = Toornament::round()->byGroup('618983668512789184');
+$groupRounds = Toornament::rounds()->byGroup('618983668512789184');
 
 // Get rounds by group number
-$groupNumberRounds = Toornament::round()->byGroupNumber(1);
+$groupNumberRounds = Toornament::rounds()->byGroupNumber(1);
 
 // Get rounds for a specific tournament, stage, and group
-$filteredRounds = Toornament::round()->byTournamentStageAndGroup(
+$filteredRounds = Toornament::rounds()->byTournamentStageAndGroup(
     '378426939508809728',
     '618945443132178479',
     '618983668512789184'
 );
 
 // Get rounds by number
-$roundsNumber2 = Toornament::round()->byNumber(2);
+$roundsNumber2 = Toornament::rounds()->byNumber(2);
 
 // Get open rounds
-$openRounds = Toornament::round()->open();
+$openRounds = Toornament::rounds()->open();
 
 // Get closed rounds
-$closedRounds = Toornament::round()->closed();
+$closedRounds = Toornament::rounds()->closed();
 
 // Get round settings
-$settings = Toornament::round()->getSettings($round);
+$settings = Toornament::rounds()->getSettings($round);
 
 // Get round match settings
-$matchSettings = Toornament::round()->getMatchSettings($round);
+$matchSettings = Toornament::rounds()->getMatchSettings($round);
 
 // Get match format
-$matchFormat = Toornament::round()->getMatchFormat($round);
+$matchFormat = Toornament::rounds()->getMatchFormat($round);
 
 // Access round properties
 $roundId = $round->getId();
@@ -644,16 +697,16 @@ $specificMatchSetting = $round->getMatchSetting('some_key');
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all sponsors
-$sponsors = Toornament::sponsor()->all();
+$sponsors = Toornament::sponsors()->all();
 
 // Find a specific sponsor
-$sponsor = Toornament::sponsor()->find('495923570669058051');
+$sponsor = Toornament::sponsors()->find('495923570669058051');
 
 // Get sponsors for a tournament
-$tournamentSponsors = Toornament::sponsor()->byTournament('378426939508809728');
+$tournamentSponsors = Toornament::sponsors()->byTournament('378426939508809728');
 
 // Create a new sponsor for a tournament
-$newSponsor = Toornament::sponsor()->createForTournament(
+$newSponsor = Toornament::sponsors()->createForTournament(
     '378426939508809728',
     'Acme Corporation',
     '529400138800557511',
@@ -662,26 +715,26 @@ $newSponsor = Toornament::sponsor()->createForTournament(
 );
 
 // Update sponsor name
-$renamedSponsor = Toornament::sponsor()->updateName('495923570669058051', 'New Sponsor Name');
+$renamedSponsor = Toornament::sponsors()->updateName('495923570669058051', 'New Sponsor Name');
 
 // Update sponsor website
-$updatedSponsor = Toornament::sponsor()->updateWebsite('495923570669058051', 'https://www.newsponsor.com');
+$updatedSponsor = Toornament::sponsors()->updateWebsite('495923570669058051', 'https://www.newsponsor.com');
 
 // Update sponsor position
-$repositionedSponsor = Toornament::sponsor()->updatePosition('495923570669058051', 2);
+$repositionedSponsor = Toornament::sponsors()->updatePosition('495923570669058051', 2);
 
 // Update sponsor logo
-$reloggedSponsor = Toornament::sponsor()->updateLogo('495923570669058051', '529400138800557512');
+$reloggedSponsor = Toornament::sponsors()->updateLogo('495923570669058051', '529400138800557512');
 
 // Reorder sponsors
-Toornament::sponsor()->reorder([
+Toornament::sponsors()->reorder([
     '495923570669058051',
     '495923570669058052',
     '495923570669058053'
 ]);
 
 // Delete a sponsor
-$deleted = Toornament::sponsor()->delete('495923570669058051');
+$deleted = Toornament::sponsors()->delete('495923570669058051');
 
 // Access sponsor properties
 $sponsorId = $sponsor->getId();
@@ -700,44 +753,44 @@ $hasLogo = $sponsor->hasLogo();
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all standing items
-$standingItems = Toornament::standing()->all();
+$standingItems = Toornament::standings()->all();
 
 // Find a specific standing item
-$standingItem = Toornament::standing()->find('378426939508809728');
+$standingItem = Toornament::standings()->find('378426939508809728');
 
 // Get standing items for a tournament
-$tournamentStandings = Toornament::standing()->byTournament('378426939508809728');
+$tournamentStandings = Toornament::standings()->byTournament('378426939508809728');
 
 // Get standing items for a participant
-$participantStandings = Toornament::standing()->byParticipant('375143143408309123');
+$participantStandings = Toornament::standings()->byParticipant('375143143408309123');
 
 // Get standing items by user
-$userStandings = Toornament::standing()->byUser('145246939508809147');
+$userStandings = Toornament::standings()->byUser('145246939508809147');
 
 // Get standing items by team
-$teamStandings = Toornament::standing()->byTeam('561714159547269773');
+$teamStandings = Toornament::standings()->byTeam('561714159547269773');
 
 // Get standing items by custom user identifier
-$customStandings = Toornament::standing()->byCustomUserIdentifier('acme:account:1234');
+$customStandings = Toornament::standings()->byCustomUserIdentifier('acme:account:1234');
 
 // Get standing items by rank range
-$topStandings = Toornament::standing()->byRankRange(1, 3);
+$topStandings = Toornament::standings()->byRankRange(1, 3);
 
 // Create a new standing item
-$newStanding = Toornament::standing()->createForParticipant(
+$newStanding = Toornament::standings()->createForParticipant(
     '378426939508809728',
     '375143143408309123',
     1
 );
 
 // Update a standing item's rank
-$updatedStanding = Toornament::standing()->updateRank('378426939508809728', 2);
+$updatedStanding = Toornament::standings()->updateRank('378426939508809728', 2);
 
-// Get the top 3 ranked participants
-$topThree = Toornament::standing()->getTopRanked(['tournament_ids' => '378426939508809728'], 3);
+// Get the top 3 ranked participants in a tournament
+$topThree = Toornament::standings()->getTopRanked('378426939508809728', 3);
 
 // Delete a standing item
-$deleted = Toornament::standing()->delete('378426939508809728');
+$deleted = Toornament::standings()->delete('378426939508809728');
 
 // Access standing item properties
 $standingId = $standingItem->getId();
@@ -751,47 +804,47 @@ $participantName = $standingItem->getParticipantName();
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all match reports
-$matchReports = Toornament::matchReport()->all();
+$matchReports = Toornament::match_reports()->all();
 
 // Find a specific match report
-$matchReport = Toornament::matchReport()->find('168954615761461654');
+$matchReport = Toornament::match_reports()->find('168954615761461654');
 
 // Get match reports for a tournament
-$tournamentReports = Toornament::matchReport()->byTournament('378426939508809728');
+$tournamentReports = Toornament::match_reports()->byTournament('378426939508809728');
 
 // Get match reports for a match
-$matchReports = Toornament::matchReport()->byMatch('618954615761465416');
+$matchReports = Toornament::match_reports()->byMatch('618954615761465416');
 
 // Get reports by participant
-$participantReports = Toornament::matchReport()->byParticipant('375143143408309123');
+$participantReports = Toornament::match_reports()->byParticipant('375143143408309123');
 
 // Get reports by user
-$userReports = Toornament::matchReport()->byUser('513743143408302391');
+$userReports = Toornament::match_reports()->byUser('513743143408302391');
 
 // Get reports by team
-$teamReports = Toornament::matchReport()->byTeam('561714159547269773');
+$teamReports = Toornament::match_reports()->byTeam('561714159547269773');
 
 // Get reports by custom user identifier
-$customReports = Toornament::matchReport()->byCustomUserIdentifier('acme:account:1234');
+$customReports = Toornament::match_reports()->byCustomUserIdentifier('acme:account:1234');
 
 // Get reports by type
-$reportsOnly = Toornament::matchReport()->byType('report');
-$disputesOnly = Toornament::matchReport()->byType('dispute');
+$reportsOnly = Toornament::match_reports()->byType('report');
+$disputesOnly = Toornament::match_reports()->byType('dispute');
 
 // Get closed reports
-$closedReports = Toornament::matchReport()->closed();
+$closedReports = Toornament::match_reports()->closed();
 
 // Get open reports
-$openReports = Toornament::matchReport()->open();
+$openReports = Toornament::match_reports()->open();
 
 // Get all standard reports
-$standardReports = Toornament::matchReport()->reports();
+$standardReports = Toornament::match_reports()->reports();
 
 // Get all disputes
-$disputes = Toornament::matchReport()->disputes();
+$disputes = Toornament::match_reports()->disputes();
 
 // Create a report for a match
-$newReport = Toornament::matchReport()->createReport(
+$newReport = Toornament::match_reports()->createReport(
     '618954615761465416',
     '375143143408309123',
     [
@@ -812,7 +865,7 @@ $newReport = Toornament::matchReport()->createReport(
 );
 
 // Create a dispute for a match
-$newDispute = Toornament::matchReport()->createDispute(
+$newDispute = Toornament::match_reports()->createDispute(
     '618954615761465416',
     '375143143408309123',
     [
@@ -833,10 +886,10 @@ $newDispute = Toornament::matchReport()->createDispute(
 );
 
 // Close a match report
-$closedReport = Toornament::matchReport()->close('168954615761461654');
+$closedReport = Toornament::match_reports()->close('168954615761461654');
 
 // Add a note to a match report
-$updatedReport = Toornament::matchReport()->addNote('168954615761461654', 'Score confirmed by admin.');
+$updatedReport = Toornament::match_reports()->addNote('168954615761461654', 'Score confirmed by admin.');
 
 // Access match report properties
 $reportId = $matchReport->getId();
@@ -857,13 +910,13 @@ $hasProofs = $matchReport->hasProofs();
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all games for a match
-$games = Toornament::matchGame()->allForMatch('618954615761465416');
+$games = Toornament::match_games()->allForMatch('618954615761465416');
 
 // Find a specific game
-$game = Toornament::matchGame()->find('618954615761465416', 1);
+$game = Toornament::match_games()->find('618954615761465416', 1);
 
 // Update a game result
-$updatedGame = Toornament::matchGame()->updateResult(
+$updatedGame = Toornament::match_games()->updateResult(
     '618954615761465416',
     1,
     [
@@ -883,12 +936,12 @@ $updatedGame = Toornament::matchGame()->updateResult(
 );
 
 // Update game status
-$completedGame = Toornament::matchGame()->setCompleted('618954615761465416', 1);
-$runningGame = Toornament::matchGame()->setRunning('618954615761465416', 2);
-$pendingGame = Toornament::matchGame()->setPending('618954615761465416', 3);
+$completedGame = Toornament::match_games()->setCompleted('618954615761465416', 1);
+$runningGame = Toornament::match_games()->setRunning('618954615761465416', 2);
+$pendingGame = Toornament::match_games()->setPending('618954615761465416', 3);
 
 // Update game properties
-$updatedGame = Toornament::matchGame()->updateProperties(
+$updatedGame = Toornament::match_games()->updateProperties(
     '618954615761465416',
     1,
     [
@@ -898,7 +951,7 @@ $updatedGame = Toornament::matchGame()->updateProperties(
 );
 
 // Update opponent properties
-$updatedGame = Toornament::matchGame()->updateOpponentProperties(
+$updatedGame = Toornament::match_games()->updateOpponentProperties(
     '618954615761465416',
     1,
     1,
@@ -910,13 +963,13 @@ $updatedGame = Toornament::matchGame()->updateOpponentProperties(
 );
 
 // Get completed games
-$completedGames = Toornament::matchGame()->getCompletedGames('618954615761465416');
+$completedGames = Toornament::match_games()->getCompletedGames('618954615761465416');
 
 // Get pending games
-$pendingGames = Toornament::matchGame()->getPendingGames('618954615761465416');
+$pendingGames = Toornament::match_games()->getPendingGames('618954615761465416');
 
 // Get running games
-$runningGames = Toornament::matchGame()->getRunningGames('618954615761465416');
+$runningGames = Toornament::match_games()->getRunningGames('618954615761465416');
 
 // Access game properties
 $gameNumber = $game->getNumber();
@@ -949,62 +1002,62 @@ $isPending = $game->isPending();
 use ServNX\Toornament\Facades\Toornament;
 
 // Get all ranking items
-$rankings = Toornament::ranking()->all();
+$rankings = Toornament::rankings()->all();
 
 // Get ranking items for a tournament
-$tournamentRankings = Toornament::ranking()->byTournament('378426939508809728');
+$tournamentRankings = Toornament::rankings()->byTournament('378426939508809728');
 
 // Get ranking items for a specific stage
-$stageRankings = Toornament::ranking()->byStage('618983668512789184');
+$stageRankings = Toornament::rankings()->byStage('618983668512789184');
 
 // Get ranking items by stage number
-$stageNumberRankings = Toornament::ranking()->byStageNumber(1);
+$stageNumberRankings = Toornament::rankings()->byStageNumber(1);
 
 // Get ranking items for a specific group
-$groupRankings = Toornament::ranking()->byGroup('618983668512789184');
+$groupRankings = Toornament::rankings()->byGroup('618983668512789184');
 
 // Get ranking items by group number
-$groupNumberRankings = Toornament::ranking()->byGroupNumber(1);
+$groupNumberRankings = Toornament::rankings()->byGroupNumber(1);
 
 // Get ranking items for a specific participant
-$participantRankings = Toornament::ranking()->byParticipant('375143143408309123');
+$participantRankings = Toornament::rankings()->byParticipant('375143143408309123');
 
 // Get ranking items by user
-$userRankings = Toornament::ranking()->byUser('145246939508809147');
+$userRankings = Toornament::rankings()->byUser('145246939508809147');
 
 // Get ranking items by team
-$teamRankings = Toornament::ranking()->byTeam('561714159547269773');
+$teamRankings = Toornament::rankings()->byTeam('561714159547269773');
 
 // Get ranking items by custom user identifier
-$customRankings = Toornament::ranking()->byCustomUserIdentifier('acme:account:1234');
+$customRankings = Toornament::rankings()->byCustomUserIdentifier('acme:account:1234');
 
 // Get ranking items by rank range
-$topRankings = Toornament::ranking()->byRankRange(1, 3);
+$topRankings = Toornament::rankings()->byRankRange(1, 3);
 
 // Get ranking items for a tournament stage
-$stageRankings = Toornament::ranking()->byTournamentAndStage(
+$stageRankings = Toornament::rankings()->byTournamentAndStage(
     '378426939508809728',
     '618983668512789184'
 );
 
 // Get ranking items for a tournament group
-$groupRankings = Toornament::ranking()->byTournamentAndGroup(
+$groupRankings = Toornament::rankings()->byTournamentAndGroup(
     '378426939508809728',
     '618983668512789184'
 );
 
 // Get top 3 ranked participants in a tournament
-$topThree = Toornament::ranking()->getTopRankedInTournament('378426939508809728', 3);
+$topThree = Toornament::rankings()->getTopRankedInTournament('378426939508809728', 3);
 
 // Get top 5 ranked participants in a stage
-$topFiveInStage = Toornament::ranking()->getTopRankedInStage(
+$topFiveInStage = Toornament::rankings()->getTopRankedInStage(
     '378426939508809728',
     '618983668512789184',
     5
 );
 
 // Get top 3 ranked participants in a group
-$topThreeInGroup = Toornament::ranking()->getTopRankedInGroup(
+$topThreeInGroup = Toornament::rankings()->getTopRankedInGroup(
     '378426939508809728',
     '618983668512789184',
     3
