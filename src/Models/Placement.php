@@ -1,6 +1,6 @@
 <?php
 
-namespace Laratoor\Models;
+namespace ServNX\Toornament\Models;
 
 use JsonSerializable;
 

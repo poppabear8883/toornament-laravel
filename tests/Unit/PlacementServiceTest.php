@@ -50,7 +50,7 @@ class PlacementServiceTest extends TestCase
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('GET', "stages/{$stageId}/placement-slots", [], 'organizer:placement')
+            ->with('GET', "stages/{$stageId}/slots", [], 'organizer:placement')
             ->andReturn($placementData);
 
         $placements = $this->service->all($stageId);
@@ -91,7 +91,7 @@ class PlacementServiceTest extends TestCase
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('PUT', "stages/{$stageId}/placement-slots", ['json' => $slots], 'organizer:placement')
+            ->with('PATCH', "stages/{$stageId}/slots", ['json' => $slots], 'organizer:placement')
             ->andReturn($responseData);
 
         $placements = $this->service->update($stageId, $slots);
@@ -105,11 +105,56 @@ class PlacementServiceTest extends TestCase
     public function testResetPlacements()
     {
         $stageId = 'stage123';
+        
+        // Current slots that need to be reset
+        $currentSlots = [
+            [
+                'number' => 1,
+                'participant_id' => 'participant123',
+                'locked' => false
+            ],
+            [
+                'number' => 2,
+                'participant_id' => 'participant456',
+                'locked' => false
+            ]
+        ];
+        
+        // Expected reset request (all participant_ids set to null)
+        $resetSlots = [
+            [
+                'number' => 1,
+                'participant_id' => null
+            ],
+            [
+                'number' => 2,
+                'participant_id' => null
+            ]
+        ];
+        
+        // Response after reset
+        $responseData = [
+            [
+                'number' => 1,
+                'participant_id' => null,
+                'locked' => false
+            ],
+            [
+                'number' => 2,
+                'participant_id' => null,
+                'locked' => false
+            ]
+        ];
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('DELETE', "stages/{$stageId}/placement-slots", [], 'organizer:placement')
-            ->andReturn(null);
+            ->with('GET', "stages/{$stageId}/slots", [], 'organizer:placement')
+            ->andReturn($currentSlots);
+            
+        $this->client->shouldReceive('request')
+            ->once()
+            ->with('PATCH', "stages/{$stageId}/slots", ['json' => $resetSlots], 'organizer:placement')
+            ->andReturn($responseData);
 
         $result = $this->service->reset($stageId);
 
@@ -164,12 +209,12 @@ class PlacementServiceTest extends TestCase
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('GET', "stages/{$stageId}/placement-slots", [], 'organizer:placement')
+            ->with('GET', "stages/{$stageId}/slots", [], 'organizer:placement')
             ->andReturn($currentSlots);
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('PUT', "stages/{$stageId}/placement-slots", ['json' => $expectedUpdate], 'organizer:placement')
+            ->with('PATCH', "stages/{$stageId}/slots", ['json' => $expectedUpdate], 'organizer:placement')
             ->andReturn($responseData);
 
         $placement = $this->service->updateSlot($stageId, $slotNumber, $participantId);
@@ -236,12 +281,12 @@ class PlacementServiceTest extends TestCase
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('GET', "stages/{$stageId}/placement-slots", [], 'organizer:placement')
+            ->with('GET', "stages/{$stageId}/slots", [], 'organizer:placement')
             ->andReturn($currentSlots);
 
         $this->client->shouldReceive('request')
             ->once()
-            ->with('PUT', "stages/{$stageId}/placement-slots", ['json' => $expectedUpdate], 'organizer:placement')
+            ->with('PATCH', "stages/{$stageId}/slots", ['json' => $expectedUpdate], 'organizer:placement')
             ->andReturn($responseData);
 
         $placement = $this->service->updateSlot($stageId, $slotNumber, $participantId);

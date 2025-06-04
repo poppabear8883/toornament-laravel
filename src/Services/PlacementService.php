@@ -25,15 +25,23 @@ class PlacementService extends BaseToornamentService
      *
      * @param string $stageId
      * @return array
+     * @throws \ServNX\Toornament\Exceptions\ToornamentException
      */
     public function all(string $stageId): array
     {
-        $data = $this->client()->request(
-            'GET',
-            "{$this->endpoint}/{$stageId}/placement-slots",
-            [],
-            $this->getScope()
-        );
+        try {
+            $data = $this->client()->request(
+                'GET',
+                "{$this->endpoint}/{$stageId}/placement-slots",
+                [],
+                $this->getScope()
+            );
+        } catch (\Exception $e) {
+            // Log the full error for debugging
+            error_log("Placement API Error: " . $e->getMessage());
+            error_log("Endpoint: {$this->endpoint}/{$stageId}/placement-slots");
+            throw $e;
+        }
 
         return array_map(function ($item) {
             return new Placement($item);
@@ -50,8 +58,8 @@ class PlacementService extends BaseToornamentService
     public function update(string $stageId, array $slots): array
     {
         $data = $this->client()->request(
-            'PUT',
-            "{$this->endpoint}/{$stageId}/placement-slots",
+            'PATCH',
+            "{$this->endpoint}/{$stageId}/slots",
             ['json' => $slots],
             $this->getScope()
         );
@@ -63,20 +71,47 @@ class PlacementService extends BaseToornamentService
 
     /**
      * Reset all placement slots for a stage.
+     * Note: The Toornament API doesn't provide a DELETE endpoint for slots.
+     * To reset, you would need to update all slots with null participant_ids.
      *
      * @param string $stageId
      * @return bool
      */
     public function reset(string $stageId): bool
     {
-        $this->client()->request(
-            'DELETE',
-            "{$this->endpoint}/{$stageId}/placement-slots",
-            [],
-            $this->getScope()
-        );
-
+        // Get all current slots
+        $slots = $this->all($stageId);
+        
+        // Set all participant_ids to null
+        $resetSlots = array_map(function ($slot) {
+            return [
+                'number' => $slot->getNumber(),
+                'participant_id' => null
+            ];
+        }, $slots);
+        
+        // Update with null participant_ids
+        $this->update($stageId, $resetSlots);
+        
         return true;
+    }
+
+    /**
+     * Verify if a stage exists and has placement slots available.
+     *
+     * @param string $stageId
+     * @return bool
+     */
+    public function verifyStage(string $stageId): bool
+    {
+        try {
+            // Try to get the stage info first
+            $stageService = app('toornament.stage');
+            $stage = $stageService->find($stageId);
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
